@@ -19,7 +19,17 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do 
+    let(:question) {create(:question_with_answers, answers_count: 7)}
+
     before { get :show, params: { id: question } }
+
+    it 'populates an array of all answers to the question' do 
+      expect(assigns(:answers)).to match_array(question.answers)
+    end
+
+    it 'assigns a new instance of Answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
 
     it 'renders show view' do
       expect(response).to render_template :show

@@ -5,6 +5,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answers = question.answers
     @answer = Answer.new
   end
 
