@@ -1,2 +1,10 @@
 h1= question.title
 p= question.body
+
+h3 Write your answer:
+
+=form_with model: [question, @answer], local: true do |form|
+  p= form.label :body, "Your answer:"
+  =form.text_area :body, id: :answer_body
+  br
+  =form.submit "Save answer"
