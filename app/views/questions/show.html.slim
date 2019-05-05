@@ -2,12 +2,15 @@
 
 h1= @question.title
 p= @question.body
+=link_to 'Delete question', question_path(@question), method: :delete
 
 h3 All answers to the question
 
-ul
+table
   -@answers.each do |answer|
-    li= answer.body
+    tr
+      td= answer.body
+      td= link_to 'Delete answer', answer_path, method: :delete
 
 h3 Write your answer:
 =form_with model: [@question, @answer], local: true do |form|

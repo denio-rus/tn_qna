@@ -4,8 +4,8 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question) }
 
-  before { login(user) }
-
+  before { login(user); p user }
+  
   describe 'GET #new' do
     before { get :new, params: { question_id: question } }
     
@@ -13,9 +13,9 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
-    it 'assigns a new answer for @question to @answer' do
+    it 'assigns a new answer for authenticated user to @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
-      expect(assigns(:answer).question).to eq question
+      expect(assigns(:answer).author).to eq user
     end
 
     it 'renders new view' do
@@ -29,9 +29,19 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
+    it 'assigns a new answer to the question to @answer' do
+      post :create, params: { answer: attributes_for(:answer), question_id: question }
+      expect(assigns(:answer)).to eq question.answers.last
+    end
+
+    it 'sets attribute author of the answer to authenticated user' do
+      post :create, params: { answer: attributes_for(:answer), question_id: question, author: user }
+      expect(assigns(:answer).author).to eq user
+    end
+
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, author: user } }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to show question view' do 

@@ -5,9 +5,11 @@ feature 'User can view the list of all questions', %q{
   As an any user
   I'd like to be able to see the list of all questions
 } do
+  let(:user) { create(:user) }
+
   scenario 'User views questions' do 
-    Question.create(title: "question 1", body: "text")
-    Question.create(title: "question 2", body: "text")
+    Question.create(title: "question 1", body: "text", author: user)
+    Question.create(title: "question 2", body: "text", author: user)
 
     visit questions_path
     

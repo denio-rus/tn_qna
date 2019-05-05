@@ -3,11 +3,13 @@ class AnswersController < ApplicationController
   before_action :find_question, only: [:new, :create]
   
   def new 
-    @answer = @question.answers.new
+    @answer = current_user.answers.new
   end
 
   def create
     @answer = @question.answers.new(answer_params)
+    @answer.author = current_user
+    
     if @answer.save
       redirect_to @question, notice: 'Your answer was saved successfully!'
     else

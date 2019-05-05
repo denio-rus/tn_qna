@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 feature 'Only authenticated user can create answers', %q{
-  In the order to provide assistance
+  In order to provide assistance
   As an authenticated user
   I'd like be able to write answer to the question
 } do
-  let(:user) { create(:user) }
-  let(:question) { create(:question_with_answers) } 
+  given(:user) { create(:user) }
+  given(:question) { create(:question_with_answers) } 
   
   describe 'An authenticated user' do 
     background do 

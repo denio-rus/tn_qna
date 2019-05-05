@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'User can write the answer on the page showing the question', %q{
-  In the order to give help
+  In order to give help
   as an user 
   I'd like to be able to write answer
 } do 

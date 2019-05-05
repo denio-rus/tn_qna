@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature 'View all answers to the question on the page showing the question', %q{
-  In the order to find solution
+  In order to find solution
   As an user
   I'd like to be able to see all answers to the question on one page'
 } do
