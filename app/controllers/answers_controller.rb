@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :find_question, only: [:new, :create]
   
   def new 
@@ -6,7 +7,14 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @question.answers.create(answer_params)
+    @answer = @question.answers.new(answer_params)
+    if @answer.save
+      redirect_to @question, notice: 'Your answer was saved successfully!'
+    else
+      @answers = @question.answers
+      flash.now[:alert] = "Answer wasn't saved"
+      render 'questions/show'
+    end
   end
 
   private
