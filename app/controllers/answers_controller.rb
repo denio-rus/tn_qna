@@ -13,10 +13,22 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: 'Your answer was saved successfully!'
     else
-      @answers = @question.answers
+      @answers = @question.answers.reload
       flash.now[:alert] = "Answer wasn't saved"
       render 'questions/show'
     end
+  end
+
+  def destroy
+    @answer = Answer.find(params[:id])
+
+    if current_user == @answer.author
+      @answer.destroy
+      flash[:notice] = 'The answer was deleted successfully'
+    else 
+      flash[:alert] = "You can't delete not your answer"
+    end
+    redirect_to @answer.question
   end
 
   private

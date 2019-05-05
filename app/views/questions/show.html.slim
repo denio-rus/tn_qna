@@ -6,11 +6,14 @@ p= @question.body
 
 h3 All answers to the question
 
-table
-  -@answers.each do |answer|
-    tr
-      td= answer.body
-      td= link_to 'Delete answer', answer_path, method: :delete
+- if @answers.any?
+  table
+    - @answers.each do |answer|
+      tr
+        td= answer.body
+        td= link_to 'Delete answer', answer_path(answer), method: :delete
+- else
+  p There is no asnwer yet.
 
 h3 Write your answer:
 =form_with model: [@question, @answer], local: true do |form|

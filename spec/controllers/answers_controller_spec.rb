@@ -61,4 +61,30 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+  describe 'DELETE #destroy' do
+    let(:answer) { create(:answer, body: 'test_delete_answer') }
+    
+    it 'finds the answer by id and it assigns to @answer' do
+      delete :destroy, params: { id: answer }
+      expect(assigns(:answer)).to eq answer
+    end
+
+    it 'An author deletes his answer' do
+      sign_in(answer.author)
+      
+      expect { delete :destroy, params: { id: answer } }.to change(answer.author.answers, :size).by(-1)
+    end
+ 
+    it 'Some user tries to delete not his answer' do
+      sign_in(user)
+      
+      expect { delete :destroy, params: { id: answer } }.to_not change(answer.author.answers, :size)
+    end
+
+    it 'redirects to the question page' do
+      delete :destroy, params: { id: answer }
+
+      expect(response).to redirect_to answer.question
+    end
+  end
 end
