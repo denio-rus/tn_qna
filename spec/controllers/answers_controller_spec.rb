@@ -4,7 +4,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question) }
 
-  before { login(user); p user }
+  before { login(user) }
   
   describe 'GET #new' do
     before { get :new, params: { question_id: question } }
@@ -61,6 +61,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+  
   describe 'DELETE #destroy' do
     let(:answer) { create(:answer, body: 'test_delete_answer') }
     
