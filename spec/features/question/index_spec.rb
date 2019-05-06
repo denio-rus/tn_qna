@@ -5,15 +5,11 @@ feature 'User can view the list of all questions', %q{
   As an any user
   I'd like to be able to see the list of all questions
 } do
-  given(:user) { create(:user) }
-
   scenario 'User views questions' do 
-    Question.create(title: "question 1", body: "text", author: user)
-    Question.create(title: "question 2", body: "text", author: user)
+    questions = create_list(:question, 8)
 
     visit questions_path
     
-    expect(page).to have_content "question 1"
-    expect(page).to have_content "question 2"
+    questions.each { |question| expect(page).to have_content question.title }
   end
 end

@@ -59,6 +59,11 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'with valid attributes' do 
+      it 'assigns a new question of current user to @question' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).author).to eq user
+      end
+
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
@@ -104,15 +109,19 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
       it 'does not change the question' do
-        question.reload
+        title = question.title
+        body = question.body
 
-        expect(question.title).to eq "MyString"
-        expect(question.body).to eq 'MyText'
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) } 
+        question.reload
+        
+        expect(title).to eq question.title
+        expect(body).to eq question.body
       end
 
       it 're-renders edit view' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
         expect(response).to render_template :edit
       end
     end
@@ -121,10 +130,15 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     before { login(user) } 
     
-    context 'Author deletes his question' do
+    context 'Author' do
       let!(:question) { create(:question, author: user) }
+
+      it 'verifies the current user is an author of the question' do
+        delete :destroy, params: { id: question }
+        expect(user).to eq question.author
+      end
       
-      it 'deletes the question' do
+      it 'deletes his question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
   
@@ -137,8 +151,18 @@ RSpec.describe QuestionsController, type: :controller do
     context "User tries to delete not his question" do
       let!(:question) { create(:question) }
 
+      it 'verifies the current user is not an author of the question' do
+        delete :destroy, params: { id: question }
+        expect(user).to_not eq question.author
+      end
+
       it "doesn't delete the question" do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirects to show question page' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to question
       end
     end
   end

@@ -1,8 +1,8 @@
 = render 'shared/errors', resource: @answer
 
-h1= @question.title
+h3= @question.title
 p= @question.body
-=link_to 'Delete question', question_path(@question), method: :delete
+=link_to 'Delete question', question_path(@question), method: :delete if current_user && current_user.author_of?(@question)
 
 h3 All answers to the question
 
@@ -11,7 +11,7 @@ h3 All answers to the question
     - @answers.each do |answer|
       tr
         td= answer.body
-        td= link_to 'Delete answer', answer_path(answer), method: :delete
+        td= link_to 'Delete answer', answer_path(answer), method: :delete if current_user && current_user.author_of?(answer)
 - else
   p There is no asnwer yet.
 
@@ -21,3 +21,5 @@ h3 Write your answer:
   =form.text_area :body, id: :answer_body
   br
   =form.submit "Save answer"
+
+= link_to 'Back to list', questions_path

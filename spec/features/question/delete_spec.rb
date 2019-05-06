@@ -22,16 +22,14 @@ feature 'Only author can delete the question', %q{
     scenario 'tries to delete a question of another user' do 
       sign_in(user)
       visit question_path(question)
-      click_on 'Delete question'
-
-      expect(page).to have_content('test_delete_question')
+      
+      expect(page).to_not have_link('Delete question')
     end
   end
 
   scenario 'An unauthenticated user tries to delete any question' do 
     visit question_path(question)
-    click_on 'Delete question'
 
-    expect(page).to have_content "You need to sign in or sign up before continuing."
+    expect(page).to_not have_link('Delete question')
   end
 end

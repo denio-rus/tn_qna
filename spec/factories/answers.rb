@@ -1,6 +1,9 @@
 FactoryBot.define do
+  sequence :body do |n|
+    "My test answer - #{n}"
+  end
   factory :answer do
-    body { "MyText-Answer" }
+    body 
 
     question
     author

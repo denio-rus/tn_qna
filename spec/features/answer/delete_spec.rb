@@ -24,16 +24,14 @@ feature 'Only author can delete the answer', %q{
       sign_in(user)
       
       visit question_path(answer.question)
-      click_on 'Delete answer'
 
-      expect(page).to have_content "MyText-Answer"
+      expect(page).to_not have_link('Delete answer')
     end
   end
 
   scenario 'An unauthenticated user tries to delete an any answer' do 
     visit question_path(answer.question)
-    click_on 'Delete answer'
-
-    expect(page).to have_content "You need to sign in or sign up before continuing."
+    
+    expect(page).to_not have_link('Delete answer')
   end
 end

@@ -6,4 +6,9 @@ class User < ApplicationRecord
 
   has_many :questions, inverse_of: :author, dependent: :nullify
   has_many :answers, inverse_of: :author, dependent: :nullify 
+
+  def author_of?(post)
+    id == post.user_id
+  end
+  
 end
