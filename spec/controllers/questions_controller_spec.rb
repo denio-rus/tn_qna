@@ -132,11 +132,6 @@ RSpec.describe QuestionsController, type: :controller do
     
     context 'Author' do
       let!(:question) { create(:question, author: user) }
-
-      it 'verifies the current user is an author of the question' do
-        delete :destroy, params: { id: question }
-        expect(user).to eq question.author
-      end
       
       it 'deletes his question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
@@ -150,11 +145,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     context "User tries to delete not his question" do
       let!(:question) { create(:question) }
-
-      it 'verifies the current user is not an author of the question' do
-        delete :destroy, params: { id: question }
-        expect(user).to_not eq question.author
-      end
 
       it "doesn't delete the question" do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)

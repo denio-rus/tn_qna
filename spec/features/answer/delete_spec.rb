@@ -25,13 +25,13 @@ feature 'Only author can delete the answer', %q{
       
       visit question_path(answer.question)
 
-      expect(page).to_not have_link('Delete answer')
+      expect(page).to_not have_link 'Delete answer'
     end
   end
 
   scenario 'An unauthenticated user tries to delete an any answer' do 
     visit question_path(answer.question)
     
-    expect(page).to_not have_link('Delete answer')
+    expect(page).to_not have_link 'Delete answer'
   end
 end

@@ -13,6 +13,6 @@ feature 'User can sign out', %q{
     visit questions_path
     click_on 'Sign out'
 
-    expect(page).to have_content("Signed out successfully.")
+    expect(page).to have_content "Signed out successfully."
   end
 end

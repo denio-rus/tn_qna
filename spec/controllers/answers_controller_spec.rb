@@ -13,11 +13,6 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with valid attributes' do
-      it 'assigns a new answer to the question to @answer' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(assigns(:answer)).to eq question.answers.last
-      end
-  
       it 'sets attribute author of the answer to authenticated user' do
         post :create, params: { answer: attributes_for(:answer), question_id: question, author: user }
         expect(assigns(:answer).author).to eq user
@@ -56,30 +51,25 @@ RSpec.describe AnswersController, type: :controller do
     context 'An author' do
       let!(:answer) { create(:answer, author: user) }
 
-      it 'verifies the current user is not an author of the answer' do
-        delete :destroy, params: { id: answer }
-        expect(user).to eq answer.author
-      end
-
       it 'deletes his answer' do
         expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to the question page' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to answer.question
       end
     end
     
     context 'Some user' do
-      it 'verifies the current user is not an author of the answer' do
-        delete :destroy, params: { id: answer }
-        expect(user).to_not eq answer.author
-      end
-
       it 'tries to delete not his answer' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
       end
-    end
-
-    it 'redirects to the question page' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to answer.question
+      
+      it 'redirects to the question page' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to answer.question
+      end
     end
   end
 end
