@@ -1,18 +1,23 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+
   def index
     @questions = Question.all
   end
 
-  def show; end
+  def show
+    @answers = question.answers
+    @answer = Answer.new
+  end
 
   def new; end
 
   def edit; end
 
   def create 
-    @question = Question.new(question_params)
+    @question = current_user.questions.new(question_params)
     if @question.save
-      redirect_to @question
+      redirect_to question_path(@question), notice: 'Your question successfully created'
     else
       render :new
     end
@@ -26,9 +31,13 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def destroy 
-    question.destroy
-    redirect_to questions_path
+  def destroy
+    if current_user.author_of?(question)
+      question.destroy
+      redirect_to questions_path, notice: 'The question was deleted successfully'
+    else 
+      redirect_to question, alert: "You can't delete not your question"
+    end
   end
   
   private
