@@ -1,7 +1,8 @@
 tr
   td= answer.body
-  td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } if current_user
-  td= link_to 'Delete answer', answer_path(answer), method: :delete if current_user&.author_of?(answer)
+  - if current_user&.author_of?(answer)
+    td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 
+    td= link_to 'Delete answer', answer_path(answer), method: :delete 
 tr
   td
     =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |form|
