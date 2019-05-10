@@ -32,8 +32,11 @@ feature 'Only authenticated user can create answers', %q{
 
   scenario 'An unauthenticated user tries to write answer to the question' do 
     visit question_path(question)
-    fill_in 'Your answer', with: 'My answer!'
-    click_on 'Save answer'
+    
+    within '.new-answer' do
+      fill_in 'Your answer', with: 'My answer!'
+      click_on 'Save answer' 
+    end
 
     expect(page).to have_content "You need to sign in or sign up before continuing."
   end

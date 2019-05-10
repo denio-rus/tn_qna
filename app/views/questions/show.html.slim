@@ -14,7 +14,7 @@ table.answers
   = render 'shared/errors', resource: @answer
 
 h3 Write your answer:
-=form_with model: [@question, @answer] do |form|
+=form_with model: [@question, @answer], class: 'new-answer' do |form|
   p= form.label :body, "Your answer:"
   =form.text_area :body, id: :answer_body
   br
