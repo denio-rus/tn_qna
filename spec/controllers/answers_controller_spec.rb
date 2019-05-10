@@ -44,7 +44,7 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer) { create(:answer) }
     
     it 'finds the answer by id and it assigns to @answer' do
-      delete :destroy, params: { id: answer }
+      delete :destroy, params: { id: answer }, format: :js
       expect(assigns(:answer)).to eq answer
     end
 
@@ -52,23 +52,23 @@ RSpec.describe AnswersController, type: :controller do
       let!(:answer) { create(:answer, author: user) }
 
       it 'deletes his answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to the question page' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to answer.question
+      it 'renders template destroy' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
     
     context 'Some user' do
       it 'tries to delete not his answer' do
-        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
       
-      it 'redirects to the question page' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to answer.question
+      it 'renders template destroy' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
   end
