@@ -7,11 +7,9 @@ class AnswersController < ApplicationController
     @answer.author = current_user
     
     if @answer.save
-      redirect_to @question, notice: 'Your answer was saved successfully!'
+      flash.now[:notice] = 'Your answer was saved successfully!'
     else
-      @answers = @question.answers.reload
       flash.now[:alert] = "Answer wasn't saved"
-      render 'questions/show'
     end
   end
 

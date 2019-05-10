@@ -16,10 +16,10 @@ html
       -else
         = link_to 'Sign in', new_user_session_path
 
-
-    p class="notice"
-      = notice
-    p class="alert" 
-      = alert 
+    .messages
+      p class="notice"
+        = notice
+      p class="alert" 
+        = alert 
     
     = yield

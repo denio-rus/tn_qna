@@ -8,7 +8,7 @@ feature 'Only authenticated user can create answers', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question_with_answers) } 
   
-  describe 'An authenticated user' do 
+  describe 'An authenticated user', js: true do 
     background do 
       sign_in(user)
       visit question_path(question)
