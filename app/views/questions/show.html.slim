@@ -6,7 +6,7 @@ h3 All answers to the question
 .answer-errors
   = render 'shared/errors', resource: @answer
 
-table.answers
+.answers
   - if @answers.any?
     = render @question.answers
   - else
