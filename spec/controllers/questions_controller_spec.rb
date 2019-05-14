@@ -148,4 +148,40 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe "POST #best_answer" do
+    before { login(user) } 
+
+    context 'An author of the question chooses the best answer to the question' do
+      let(:question) { create(:question, author: user) }
+      let(:best_answer) { create(:answer, question: question) }
+
+      before { post :best_answer, params: { id: question, question: attributes_for(:question), answer_id: best_answer.id }, format: :js }
+
+      it 'updates best_answer_id attribute of the question' do
+        question.reload
+        expect(question.best_answer).to eq best_answer
+      end
+
+      it 'render best_answer template' do
+        expect(response).to render_template :best_answer
+      end
+
+    end
+    context "Some user tries to choose the best answer to another user's question" do
+      let(:question) { create(:question) }
+      let(:best_answer) { create(:answer, question: question) }
+
+      before { post :best_answer, params: { id: question, question: attributes_for(:question), answer_id: best_answer.id }, format: :js }
+
+      it 'does not update best_answer_id attribute of the question' do
+        question.reload
+        expect(question.best_answer).to_not eq best_answer
+      end
+
+      it 'render best_answer template' do
+        expect(response).to render_template :best_answer
+      end
+    end
+  end
 end

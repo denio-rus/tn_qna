@@ -1,16 +1,13 @@
 .question
   = render question
 
-h3 All answers to the question
-
 .answer-errors
   = render 'shared/errors', resource: @answer
 
 .answers
-  - if @answers.any?
-    = render @question.answers
-  - else
-    p There is no asnwer yet.
+  h3 Answers
+  
+  = render @answers
 
 h3 Write your answer:
 =form_with model: [@question, @answer], class: 'new-answer' do |form|

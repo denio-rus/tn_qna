@@ -51,6 +51,16 @@ RSpec.describe AnswersController, type: :controller do
     context 'An author' do
       let!(:answer) { create(:answer, author: user) }
 
+      it 'sets to nil best_answer_id attribute of the question if deleted answer is the best' do
+        question = answer.question
+        question.best_answer_id = answer.id
+
+        delete :destroy, params: { id: answer }, format: :js
+        
+        question.reload
+        expect(question.best_answer_id).to eq nil
+      end
+
       it 'deletes his answer' do
         expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
