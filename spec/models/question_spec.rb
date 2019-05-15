@@ -13,4 +13,8 @@ RSpec.describe Question, type: :model do
     question.answers.order(id: :desc)[3].set_best
     expect(question.best_answer).to eq question.answers.order(id: :desc)[3]
   end
+
+  it 'have one attached file' do
+    expect(Question.new.file).to be_an_instance_of(ActiveStorage::Attached::One)
+  end
 end
