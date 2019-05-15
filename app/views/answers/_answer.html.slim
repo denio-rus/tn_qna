@@ -1,0 +1,15 @@
+.[class='answer-#{answer.id}']
+  p= answer.body
+  
+  - if current_user&.author_of?(answer)
+    p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 
+    p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true 
+  
+  - if current_user&.author_of?(answer.question) && answer.question.best_answer != answer
+    p= link_to 'Make it the best answer', best_answer_path(answer), method: :post, remote: true
+
+  =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |form|
+    = form.label :body, "Your answer:"
+    = form.text_area :body, id: :answer_body
+    = form.submit 'Save'
+  hr  

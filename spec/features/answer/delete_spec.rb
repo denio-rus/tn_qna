@@ -8,10 +8,10 @@ feature 'Only author can delete the answer', %q{
 
   given(:answer) { create(:answer) }
 
-  describe 'An authenticated user' do
+  describe 'An authenticated user'do
     given(:user) { create(:user) }
 
-    scenario 'deletes his answer' do
+    scenario 'deletes his answer', js: true  do
       sign_in(answer.author) 
 
       visit question_path(answer.question)

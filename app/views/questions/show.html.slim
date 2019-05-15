@@ -1,22 +1,16 @@
-= render 'shared/errors', resource: @answer
+.question
+  = render question
 
-h3= @question.title
-p= @question.body
-=link_to 'Delete question', question_path(@question), method: :delete if current_user&.author_of?(@question)
+.answer-errors
+  = render 'shared/errors', resource: @answer
 
-h3 All answers to the question
+h3 Answers
 
-- if @answers.any?
-  table
-    - @answers.each do |answer|
-      tr
-        td= answer.body
-        td= link_to 'Delete answer', answer_path(answer), method: :delete if current_user&.author_of?(answer)
-- else
-  p There is no asnwer yet.
+.answers  
+  = render @answers
 
 h3 Write your answer:
-=form_with model: [@question, @answer], local: true do |form|
+=form_with model: [@question, @answer], class: 'new-answer' do |form|
   p= form.label :body, "Your answer:"
   =form.text_area :body, id: :answer_body
   br

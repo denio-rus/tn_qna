@@ -1,0 +1,13 @@
+<% if alert %>
+  $('.messages').html('<p class="alert"><%= alert %></p>');
+<% end %>
+
+<% if notice %>
+  $('.messages').html('<p class="notice"><%= notice %></p>');
+<% end %>
+
+$('.question-errors').html('<%= render 'shared/errors', resource: question %>');
+
+<% if !@question.errors.present? %>
+  $('.question').html('<%= j render question %>');
+<% end %>
