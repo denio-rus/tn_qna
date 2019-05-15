@@ -80,41 +80,64 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     before { login(user) }
 
-    context 'with valid attributes' do
-      it 'assigns the requested question to @question' do 
-        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-        expect(assigns(:question)).to eq question
+    context "An author" do
+      let(:question) { create(:question, author: user) }
+      context 'with valid attributes' do
+        it 'assigns the requested question to @question' do 
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'changes question attributes' do
+          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+          question.reload
+
+          expect(question.title).to eq 'new title'
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+          expect(response).to render_template :update
+        end
       end
+      
+      context 'with invalid attributes' do
+        it 'does not change the question' do
+          title = question.title
+          body = question.body
 
-      it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
-        question.reload
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          question.reload
+          
+          expect(title).to eq question.title
+          expect(body).to eq question.body
+        end
 
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
-      end
-
-      it 'renders update view' do
-        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-        expect(response).to render_template :update
+        it 'renders update view' do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does not change the question' do
-        title = question.title
-        body = question.body
+    context 'Some user' do
+      context 'tries to update not his question' do
+        it 'does not change the question' do
+          title = question.title
+          body = question.body
 
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
-        question.reload
-        
-        expect(title).to eq question.title
-        expect(body).to eq question.body
-      end
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+          question.reload
+          
+          expect(title).to eq question.title
+          expect(body).to eq question.body
+        end
 
-      it 'renders update view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
-        expect(response).to render_template :update
+        it 'renders update view' do
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+          expect(response).to render_template :update
+        end
       end
     end
   end
@@ -145,42 +168,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to show question page' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to question
-      end
-    end
-  end
-
-  describe "POST #best_answer" do
-    before { login(user) } 
-
-    context 'An author of the question chooses the best answer to the question' do
-      let(:question) { create(:question, author: user) }
-      let(:best_answer) { create(:answer, question: question) }
-
-      before { post :best_answer, params: { id: question, question: attributes_for(:question), answer_id: best_answer.id }, format: :js }
-
-      it 'updates best_answer_id attribute of the question' do
-        question.reload
-        expect(question.best_answer).to eq best_answer
-      end
-
-      it 'render best_answer template' do
-        expect(response).to render_template :best_answer
-      end
-
-    end
-    context "Some user tries to choose the best answer to another user's question" do
-      let(:question) { create(:question) }
-      let(:best_answer) { create(:answer, question: question) }
-
-      before { post :best_answer, params: { id: question, question: attributes_for(:question), answer_id: best_answer.id }, format: :js }
-
-      it 'does not update best_answer_id attribute of the question' do
-        question.reload
-        expect(question.best_answer).to_not eq best_answer
-      end
-
-      it 'render best_answer template' do
-        expect(response).to render_template :best_answer
       end
     end
   end

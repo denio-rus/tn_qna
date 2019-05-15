@@ -51,16 +51,6 @@ RSpec.describe AnswersController, type: :controller do
     context 'An author' do
       let!(:answer) { create(:answer, author: user) }
 
-      it 'sets to nil best_answer_id attribute of the question if deleted answer is the best' do
-        question = answer.question
-        question.best_answer_id = answer.id
-
-        delete :destroy, params: { id: answer }, format: :js
-        
-        question.reload
-        expect(question.best_answer_id).to eq nil
-      end
-
       it 'deletes his answer' do
         expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
@@ -84,31 +74,77 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATH #update' do
-    let!(:answer) { create(:answer, question: question) }
+    context 'An author' do
+      let(:answer) { create(:answer, question: question, author: user) }
 
-    context 'with valid attributes' do
-      it 'changes answer attributes' do
-        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-        answer.reload
-        expect(answer.body).to eq 'new body'
+      context 'with valid attributes' do
+        it 'changes answer attributes' do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          expect(response).to render_template :update
+        end
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-        expect(response).to render_template :update
+      context 'with invalid attributes' do
+        it 'does not change answer attributes' do
+          expect do
+            patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          end .to_not change(answer, :body)
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalid attributes' do
+    context "Some user tries to update not his answer" do
+      let(:answer) { create(:answer, question: question) }
+
       it 'does not change answer attributes' do
         expect do
-          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
         end .to_not change(answer, :body)
       end
 
       it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
         expect(response).to render_template :update
+      end
+    end
+  end
+
+  describe "POST #best" do
+    let(:answer) { create(:answer, question: question) }
+    
+    before { post :best, params: { id: answer }, format: :js }
+    
+    context 'An author of the question chooses the best answer' do
+      let(:question) { create(:question, author: user) }
+      
+
+      it 'sets best answer to the question' do
+        expect(question.best_answer).to eq answer
+      end
+
+      it 'renders best template' do
+        expect(response).to render_template :best
+      end
+    end
+    
+    context "Some user tries to choose the best answer to another user's question" do
+      it 'does not set best answer to the question' do
+        expect(question.best_answer).to eq nil
+      end
+
+      it 'renders best template' do
+        expect(response).to render_template :best
       end
     end
   end

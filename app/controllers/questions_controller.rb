@@ -6,7 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answers = question.ordered_answers
+    @answers = question.answers.best_first
     @answer = Answer.new
   end
 
@@ -24,7 +24,7 @@ class QuestionsController < ApplicationController
   end
 
   def update 
-    question.update(question_params)
+    question.update(question_params) if current_user.author_of?(question)
   end
 
   def destroy
@@ -34,11 +34,6 @@ class QuestionsController < ApplicationController
     else 
       redirect_to question, alert: "You can't delete not your question"
     end
-  end
-
-  
-  def best_answer
-    question.update(best_answer_id: params[:answer_id].to_i) if current_user.author_of?(question)
   end
 
   private
