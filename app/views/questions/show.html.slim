@@ -14,10 +14,10 @@ h3 Write your answer:
   p
     = form.label :body, "Your answer:"
     = form.text_area :body, id: :answer_body
-  br
+    br
     = form.label :files
     = form.file_field :files, multiple: true
-
-  =form.submit "Save answer"
+    br
+    =form.submit "Save answer"
 
 = link_to 'Back to list', questions_path
