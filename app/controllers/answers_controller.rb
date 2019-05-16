@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
-  before_action :find_answer, only: [:update, :destroy, :best]
+  before_action :find_answer, only: [:update, :destroy, :best, :delete_attachment]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -26,11 +26,18 @@ class AnswersController < ApplicationController
   def best
     @answer.set_best if current_user.author_of?(@answer.question)
   end
+
+  def delete_attachment
+    if current_user.author_of?(@answer)
+      @answer.files.find(params[:attachment_id]).purge
+      @answer.reload
+    end
+  end
  
   private
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
   
   def find_question

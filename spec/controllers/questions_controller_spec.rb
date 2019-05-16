@@ -171,4 +171,38 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE#delete_attachment" do
+    let(:question) { create(:question_with_attached_file) }
+
+    context 'An author deletes attached file' do
+      before do
+        login(question.author)
+        delete :delete_attachment, params: { id: question, attachment_id: question.files.first }, format: :js
+      end
+
+      it 'deletes the attached file' do
+        expect(question.reload.files).to_not be_attached
+      end
+
+      it 'renders delete_attachment view' do
+        expect(response).to render_template :delete_attachment
+      end
+    end
+
+    context "User tries to delete file attached to another user's question" do
+      before do
+        login(user)
+        delete :delete_attachment, params: { id: question, attachment_id: question.files.first }, format: :js
+      end
+
+      it 'does not delete the attached file' do
+        expect(question.reload.files).to be_attached
+      end
+
+      it 'renders delete_attachment view' do
+        expect(response).to render_template :delete_attachment
+      end
+    end
+  end
 end
