@@ -13,7 +13,13 @@
     p= link_to 'Make it the best answer', best_answer_path(answer), method: :post, remote: true
 
   =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |form|
-    = form.label :body, "Your answer:"
-    = form.text_area :body, id: :answer_body
-    = form.submit 'Save'
+    p
+      = form.label :body, "Your answer:"
+      br
+      = form.text_area :body, id: :answer_body
+      br
+      = form.label :files
+      = form.file_field :files, multiple: true
+      br
+      = form.submit 'Save'
   hr  
