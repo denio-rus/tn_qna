@@ -12,6 +12,10 @@ FactoryBot.define do
       title { nil }
     end
 
+    factory :question_with_attached_file do
+      after(:create) { |question| question.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'rails_helper.rb') }
+    end
+
     factory :question_with_answers do
       transient do
         answers_count { 5 }

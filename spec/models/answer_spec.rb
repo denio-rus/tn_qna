@@ -24,8 +24,12 @@ RSpec.describe Answer, type: :model do
     expect(question.answers.where(best: true).count).to eq 1
   end
 
-  it 'set the best answer to be the first one in the list' do
+  it 'sets the best answer to be the first one in the list' do
     question.answers.last.set_best
     expect(question.answers.best_first.first).to eq question.answers.last
+  end
+
+  it 'have many atteched files' do
+    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 end
