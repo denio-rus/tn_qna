@@ -14,18 +14,19 @@ feature 'User can delete files attached', %q{
     scenario 'as an author of the answer deletes attached file' do
       sign_in answer.author
       visit question_path(question)
+      file_link_name = answer.files.first.filename.to_s
 
       within '.answers' do
         click_on 'Delete file'
 
-        expect(page).to_not have_link answer.files.first.filename.to_s
+        expect(page).to_not have_link file_link_name
       end
     end
 
     scenario "tries to delete files attached to another user's answer" do
       sign_in user
       visit question_path(question)
-
+      
       within '.answers' do
         expect(page).to have_link answer.files.first.filename.to_s
         expect(page).to_not have_link 'Delete file'
@@ -35,11 +36,11 @@ feature 'User can delete files attached', %q{
     scenario 'as an author of the question deletes attached file' do
       sign_in question.author
       visit question_path(question)
-
+      file_link_name = question.files.first.filename.to_s
       within '.question' do
         click_on 'Delete file'
 
-        expect(page).to_not have_link question.files.first.filename.to_s
+        expect(page).to_not have_link file_link_name
       end
     end
 

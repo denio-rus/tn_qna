@@ -4,7 +4,7 @@ class AttachmentsController < ApplicationController
   def destroy
     attachment = ActiveStorage::Attachment.find(params[:id])
     resource = attachment.record
-    resource.files.find(attachment.id).purge if current_user.author_of?(resource)
+    attachment.purge if current_user.author_of?(resource)
     if resource.is_a?(Question)
       @question = resource     
     else
