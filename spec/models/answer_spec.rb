@@ -4,9 +4,12 @@ RSpec.describe Answer, type: :model do
   let (:question) { create(:question_with_answers, answers_count: 3) }
 
   it { should belong_to(:author).class_name('User') }
-  it { should belong_to :question }
-
+  it { should belong_to(:question) }
+  it { should have_many(:links).dependent(:destroy) }
+  
   it { should validate_presence_of :body }
+
+  it { should accept_nested_attributes_for :links }
 
   it "set the best answer to the question, it's only one" do
     question.answers.last.set_best
