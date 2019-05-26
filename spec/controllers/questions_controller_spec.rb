@@ -41,9 +41,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     it 'builds a new link to @question' do
       expect(assigns(:question).links.first).to be_a_new(Link)

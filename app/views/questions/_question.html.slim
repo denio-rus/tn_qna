@@ -4,8 +4,8 @@
 h3= question.title
 p= question.body
 
+p Links:
 .links
-  p Links:  
   - question.links.each do |link|
     - if link.gist?
       - link.gist_content.map do |file, content|
