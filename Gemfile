@@ -40,6 +40,7 @@ gem 'devise'
 gem 'jquery-rails'
 gem "aws-sdk-s3", require: false
 gem "cocoon"
+gem 'octokit'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'

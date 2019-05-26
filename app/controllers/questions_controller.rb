@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    question.links.build
     @answers = question.answers.best_first
     @answer = Answer.new
     @answer.links.new
@@ -13,9 +14,6 @@ class QuestionsController < ApplicationController
 
   def new
     question.links.new
-  end
-
-  def edit
   end
 
   def create 
@@ -49,7 +47,7 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body,
-                                     files: [], links_attributes: [:name, :url]) 
+    params.require(:question).permit(:title, :body, files: [],
+                                     links_attributes: [:id, :name, :url, :_destroy]) 
   end
 end

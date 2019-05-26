@@ -1,0 +1,7 @@
+<% if @question %>
+  $('.question').html('<%= j render @question %>');
+<% else %>
+  $('.answer-<%= @answer.id %>').html('<%= j render @answer %>');
+<% end %>
+
+

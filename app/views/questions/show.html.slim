@@ -1,15 +1,10 @@
 .question
   = render question
-.links
-  p Links:
-  ul
-    - question.links.each do |link|
-      li= link_to link.name, link.url
+
+h3 Answers
 
 .answer-errors
   = render 'shared/errors', resource: @answer
-
-h3 Answers
 
 .answers  
   = render @answers
@@ -27,7 +22,7 @@ h3 Write your answer:
   p  
     = f.fields_for :links do |link| 
       = render 'shared/link_fields', f: link
-    .links
+    p.links
       = link_to_add_association 'Add link', f, :links, partial: 'shared/link_fields'
     =f.submit "Save answer"
 
