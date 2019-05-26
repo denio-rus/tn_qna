@@ -36,6 +36,19 @@ feature 'User can create question', %q{
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
     end
+
+    scenario 'asks a question with reward' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+  
+      fill_in 'Reward', with: 'Grand Prix'
+      attach_file 'Image', "#{Rails.root}/app/assets/images/cup.jpg"
+  
+      click_on 'Ask'
+  
+      expect(page).to have_content 'Grand Prix'
+      expect(page).to have_css "img[src*='cup.jpg']"
+    end
   
     scenario 'asks a question with errors' do 
       click_on 'Ask'

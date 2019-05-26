@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_18_070455) do
+ActiveRecord::Schema.define(version: 2019_05_26_165642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(version: 2019_05_18_070455) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
+  end
+
+  create_table "rewards", force: :cascade do |t|
+    t.string "title"
+    t.string "rewardable_type"
+    t.bigint "rewardable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rewardable_type", "rewardable_id"], name: "index_rewards_on_rewardable_type_and_rewardable_id"
   end
 
   create_table "users", force: :cascade do |t|

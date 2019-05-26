@@ -27,6 +27,12 @@ p= question.body
       - if current_user&.author_of?(question)
         = link_to 'Delete file', attachment_path(file), method: :delete, remote: true 
 
+- if question.reward
+  p Reward:
+  p
+    = question.reward.title
+    = image_tag question.reward.image
+
 - if current_user&.author_of?(question)
   = link_to 'Edit question','#', class: 'edit-question-link', data: { question_id: question.id }
   br 
