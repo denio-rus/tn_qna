@@ -6,7 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    question.links.build
+    question.links.build if question.links.empty?
     @answers = question.answers.best_first
     @answer = Answer.new
     @answer.links.new

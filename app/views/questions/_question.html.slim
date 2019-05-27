@@ -4,28 +4,30 @@
 h3= question.title
 p= question.body
 
-p Links:
-.links
-  - question.links.each do |link|
-    - if link.gist?
-      - link.gist_content.map do |file, content|
-        p= file
-        textarea= content
-        br
-        = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(question) && link.persisted?
-    -else
-      p
-        = link_to link.name, link.url
-        br
-        = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(question) && link.persisted?
 
-- if question.files.attached?
-  - question.files.each do |file|
-    p
-      = link_to file.filename.to_s, url_for(file)
-      br
-      - if current_user&.author_of?(question)
-        = link_to 'Delete file', attachment_path(file), method: :delete, remote: true 
+.links
+  -if question.links.first.persisted?
+    p Links:
+    -question.links.each do |link|
+      -if link.gist?
+        -link.gist_content.map do |file, content|
+          p= file
+          textarea= content
+          br= link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(question) && link.persisted?
+      -else
+        p
+          = link_to link.name, link.url
+          br
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(question) && link.persisted?
+
+.files
+  - if question.files.attached?
+    - question.files.each do |file|
+      p
+        = link_to file.filename.to_s, url_for(file)
+        br
+        - if current_user&.author_of?(question)
+          = link_to 'Delete file', attachment_path(file), method: :delete, remote: true 
 
 - if question.reward
   p Reward:
