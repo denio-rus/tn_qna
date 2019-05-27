@@ -1,0 +1,9 @@
+h1 Your Rewards 
+table
+  - @rewards.each do |reward|
+    tr
+      td= reward.question.title
+      td= image_tag reward.image
+      td= reward.title
+
+p= link_to 'Back to list', questions_path   

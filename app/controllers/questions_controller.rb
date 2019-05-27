@@ -6,13 +6,16 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    question.links.build if question.links.empty?
     @answers = question.answers.best_first
     @answer = Answer.new
+    @answer.links.new
   end
 
-  def new; end
-
-  def edit; end
+  def new
+    question.links.new
+    question.build_reward
+  end
 
   def create 
     @question = current_user.questions.new(question_params)
@@ -45,6 +48,8 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [],
+                                     links_attributes: [:id, :name, :url, :_destroy],
+                                     reward_attributes: [:id, :title, :image]) 
   end
 end

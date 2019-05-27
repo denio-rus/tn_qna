@@ -1,5 +1,20 @@
 .[class='answer-#{answer.id}']
   p= answer.body
+
+  .links
+    p Links:  
+    
+    - answer.links.each do |link|
+      - if link.gist?
+        - link.gist_content.map do |file, content|
+          p= file
+          textarea= content
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(answer)
+      -else
+        p
+          = link_to link.name, link.url
+          br
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(answer)
   
   -if answer.files.attached?
     -answer.files.each do |file|
@@ -9,21 +24,27 @@
         -if current_user&.author_of?(answer)
           =link_to 'Delete file', attachment_path(file), method: :delete, remote: true         
 
-  - if current_user&.author_of?(answer)
+  -if current_user&.author_of?(answer)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 
     p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true 
   
-  - if current_user&.author_of?(answer.question) && answer.question.best_answer != answer
+  -if current_user&.author_of?(answer.question) && answer.question.best_answer != answer
     p= link_to 'Make it the best answer', best_answer_path(answer), method: :post, remote: true
 
-  =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |form|
+  =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     p
-      = form.label :body, "Your answer:"
+      = f.label :body, "Your answer:"
       br
-      = form.text_area :body, id: :answer_body
+      = f.text_area :body, id: :answer_body
       br
-      = form.label :files
-      = form.file_field :files, multiple: true, direct_upload: true
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
       br
-      = form.submit 'Save'
+    p Links:
+    p  
+      = f.fields_for :links do |link| 
+        = render 'shared/link_fields', f: link
+      .links
+        = link_to_add_association 'Add link', f, :links, partial: 'shared/link_fields'
+      = f.submit 'Save'
   hr  

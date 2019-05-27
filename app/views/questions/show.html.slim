@@ -1,23 +1,29 @@
 .question
   = render question
 
+h3 Answers
+
 .answer-errors
   = render 'shared/errors', resource: @answer
-
-h3 Answers
 
 .answers  
   = render @answers
 
 h3 Write your answer:
-=form_with model: [@question, @answer], class: 'new-answer' do |form|
+=form_with model: [@question, @answer], class: 'new-answer' do |f|
   p
-    = form.label :body, "Your answer:"
-    = form.text_area :body, id: :answer_body
+    = f.label :body, "Your answer:"
+    = f.text_area :body, id: :answer_body
     br
-    = form.label :files
-    = form.file_field :files, multiple: true
+    = f.label :files
+    = f.file_field :files, multiple: true
     br
-    =form.submit "Save answer"
+  p Links:
+  p  
+    = f.fields_for :links do |link| 
+      = render 'shared/link_fields', f: link
+    p.links
+      = link_to_add_association 'Add link', f, :links, partial: 'shared/link_fields'
+    =f.submit "Save answer"
 
-= link_to 'Back to list', questions_path
+p= link_to 'Back to list', questions_path
