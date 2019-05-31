@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative './concerns/votable_spec'
 
 RSpec.describe Answer, type: :model do
   let!(:question) { create(:question_with_answers, answers_count: 3) }
@@ -10,6 +11,8 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
 
   it { should accept_nested_attributes_for :links }
+
+  it_behaves_like 'votable'
 
   it "set the best answer to the question, it's only one" do
     question.answers.last.set_best

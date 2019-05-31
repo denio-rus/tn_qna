@@ -14,6 +14,8 @@ RSpec.describe Question, type: :model do
   it { should accept_nested_attributes_for :links }
   it { should accept_nested_attributes_for :reward }
 
+  it_behaves_like 'votable'
+
   it 'returns best answer' do
     question.answers.order(id: :desc)[3].set_best
     expect(question.best_answer).to eq question.answers.order(id: :desc)[3]
