@@ -2,16 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Vote, type: :model do
   let!(:vote) { create(:vote) }
+  let(:question) { create(:question) }
   
   it { should belong_to :votable }
   it { should belong_to(:user).dependent(:destroy) }
 
   it { should validate_uniqueness_of(:user_id).scoped_to([:votable_id, :votable_type]) }
-  
-  
-  let(:question) { create(:question) }
 
-  it "validate user isn't votable's author" do
+  it "validates user isn't votable's author" do
     vote = Vote.new
     vote.votable = question
     vote.user = question.author
