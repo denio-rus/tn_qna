@@ -33,4 +33,19 @@ RSpec.describe Vote, type: :model do
     vote.unvote
     expect(vote.nominal).to eq 'unvote'
   end
+  #factorybot gives vote with nominal 'like'
+  it 'returns true if user is already voted - like' do
+    expect(vote).to be_voted
+  end
+
+  it 'returns true if user is already voted - dislike' do
+    vote.unvote
+    vote.dislike
+    expect(vote).to be_voted
+  end
+
+  it 'returns false if user is not already voted' do
+    vote.unvote
+    expect(vote).to_not be_voted
+  end
 end

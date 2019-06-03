@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative './concerns/votable_spec'
 
 RSpec.describe Answer, type: :model do
   let!(:question) { create(:question_with_answers, answers_count: 3) }

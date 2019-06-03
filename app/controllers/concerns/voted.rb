@@ -10,39 +10,36 @@ module Voted
     if @vote
       @vote.like
     else 
-      @vote = @votable.votes.create(user: current_user, nominal: 'like')
+      @votable.votes.create(user: current_user, nominal: 'like')
     end
 
-    respond_to do |format|
-      format.json { render json: @votable }
-    end
+    rating_respond_with_json
   end
 
   def dislike
     if @vote
       @vote.dislike
     else 
-      @vote = @votable.votes.create(user: current_user, nominal: 'dislike')
+      @votable.votes.create(user: current_user, nominal: 'dislike')
     end
 
-    render
+    rating_respond_with_json
   end
 
   def unvote
     @vote.unvote if @vote
 
-    render
+    rating_respond_with_json
   end
 
   private
 
-  def find_vote
-    @vote = @votable.votes.find_by(user: current_user)
+  def rating_respond_with_json
+    render json: { rating: @votable.rating } 
   end
 
-  def render_template(action)
-    instance_variable_set("@#{controller_name.singularize}", @votable)
-    render "#{controller_name}/#{action}"    
+  def find_vote
+    @vote = @votable.votes.find_by(user: current_user)
   end
   
   def model_klass

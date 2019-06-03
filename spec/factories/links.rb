@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :link do
     name 
     url { "http://yandex.ru" }
+    for_question
 
     trait :for_question do
       association(:linkable, factory: :question)

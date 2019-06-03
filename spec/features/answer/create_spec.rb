@@ -18,7 +18,6 @@ feature 'Only authenticated user can create answers', %q{
       fill_in 'Your answer', with: 'My answer!'
       click_on 'Save answer'
 
-      expect(page).to have_content 'Your answer was saved successfully!'
       expect(page).to have_content 'My answer!'
     end
 
@@ -26,6 +25,9 @@ feature 'Only authenticated user can create answers', %q{
       fill_in 'Your answer', with: 'My answer!'
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
       click_on 'Save answer'
+      
+      sleep 0.3
+      visit question_path(question)
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
@@ -34,7 +36,6 @@ feature 'Only authenticated user can create answers', %q{
     scenario 'writes answer to the question with errors' do 
       click_on 'Save answer'
 
-      expect(page).to have_content "Answer wasn't saved"
       expect(page).to have_content "Body can't be blank"
     end
   end

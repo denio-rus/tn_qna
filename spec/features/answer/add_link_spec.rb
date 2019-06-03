@@ -28,6 +28,8 @@ feature 'User can add links', %q{
   
     click_on 'Save answer'
 
+    visit question_path(question)
+
     within '.answers' do
       expect(page).to_not have_link 'My gist', href: gist_url
       expect(page).to have_link 'yandex', href: 'http://yandex.ru'

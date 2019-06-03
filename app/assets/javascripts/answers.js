@@ -17,5 +17,11 @@ $(document).on('turbolinks:load', function(){
         $('.answer-errors').html('');
         $('.answer-errors').append('<p>' + value + '</p>');
       });
-    })
+    });
+  
+  $('div.voting-answer a').on('ajax:success', function(e) {
+    var voting = e.detail[0];
+    var answerId = $(this).data('answerId');
+    $('p.rating-answer-' + answerId).html('rating: ' + voting.rating);
+  });
 });

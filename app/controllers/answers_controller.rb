@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
   before_action :find_answer, only: [:update, :destroy, :best]
@@ -7,7 +9,6 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     
-
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }

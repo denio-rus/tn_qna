@@ -18,13 +18,13 @@ class Vote < ApplicationRecord
   def unvote
     update(nominal: 0) if voted?
   end
-  
-  private
 
   def voted?
     nominal != 'unvote'
   end
-
+  
+  private
+  
   def validate_not_author_of_votable
     errors.add(:user_id, "Author can't vote!") if votable&.user_id == user_id  && user_id.present?
   end

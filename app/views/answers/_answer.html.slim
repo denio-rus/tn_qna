@@ -1,6 +1,22 @@
 .[class='answer-#{answer.id}']
   p= answer.body
 
+  .voting-answer
+    p.[class='rating-answer-#{answer.id}'] 
+      | rating: 
+      = answer.rating
+      
+    p.voting-answer-links
+      -if current_user && current_user != answer.author
+        =link_to 'Unvote', unvote_answer_path(answer), method: :patch, 
+                  data: { type: :json, answer_id: answer.id }, remote: true
+        br
+        =link_to "Dislike", dislike_answer_path(answer), method: :patch, 
+                  data: { type: :json, answer_id: answer.id }, remote: true
+        br
+        =link_to "Like", like_answer_path(answer), method: :patch, 
+                  data: { type: :json, answer_id: answer.id }, remote: true
+                  
   .links
     p Links:  
     
