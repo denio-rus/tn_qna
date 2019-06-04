@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
   before_action :find_answer, only: [:update, :destroy, :best]
@@ -7,10 +9,14 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     
-    if @answer.save
-      flash.now[:notice] = 'Your answer was saved successfully!'
-    else
-      flash.now[:alert] = "Answer wasn't saved"
+    respond_to do |format|
+      if @answer.save
+        format.json { render json: @answer }
+      else
+        format.json do 
+          render json: @answer.errors.full_messages, status: :unprocessable_entity
+        end
+      end
     end
   end
 

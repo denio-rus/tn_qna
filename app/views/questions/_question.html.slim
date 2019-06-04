@@ -4,9 +4,22 @@
 h3= question.title
 p= question.body
 
+.question-voting
+  p.question-rating 
+    | rating: 
+    = question.rating
+
+  p.question-voting-links
+    -if current_user && current_user != question.author
+      =link_to 'Unvote', unvote_question_path(question), method: :patch, data: { type: :json }, remote: true 
+      br
+      =link_to "Dislike", dislike_question_path(question), method: :patch, data: { type: :json }, remote: true
+      br
+      =link_to "Like", like_question_path(question), method: :patch, data: { type: :json }, remote: true
+
 
 .links
-  -if question.links.first.persisted?
+  -if question&.links&.first&.persisted?
     p Links:
     -question.links.each do |link|
       -if link.gist?

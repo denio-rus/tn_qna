@@ -16,4 +16,6 @@
 //= require jquery3
 //= require activestorage
 //= require cocoon
+//= require handlebars
+//= require_tree ./templates
 //= require_tree .

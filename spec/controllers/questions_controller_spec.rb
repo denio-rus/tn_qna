@@ -184,4 +184,8 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'voted actions' do
+    it_behaves_like 'voted'
+  end
 end
