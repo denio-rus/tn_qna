@@ -16,7 +16,7 @@ module Qna
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    config.action_cable.disable_request_forgery_protection = false
+    config.action_cable.disable_request_forgery_protection = true
 
     config.generators do |g|
       g.test_framwork :rspec,
