@@ -41,7 +41,8 @@ gem 'jquery-rails'
 gem "aws-sdk-s3", require: false
 gem "cocoon"
 gem 'octokit'
-gem 'handlebars_assets'
+gem 'gon'
+gem 'skim'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'

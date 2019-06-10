@@ -15,7 +15,11 @@
 //= require turbolinks
 //= require jquery3
 //= require activestorage
+//= require action_cable
 //= require cocoon
-//= require handlebars
-//= require_tree ./templates
+//= require skim
 //= require_tree .
+
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();
