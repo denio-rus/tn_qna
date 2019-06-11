@@ -42,10 +42,12 @@ class AnswersController < ApplicationController
 
     ActionCable.server.broadcast(
       "answers_for_question_#{@question.id}",
-      ApplicationController.render(
-        partial: 'answers/answer',
-        locals: { answer: @answer, current_user: current_user }
-      )
+      {
+        answer: @answer,
+        links: @answer.links_to_hash
+        rating: @answer.rating,
+        files: @answer.files_links_to_hash
+      }
     )
   end
 

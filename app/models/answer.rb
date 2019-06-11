@@ -20,4 +20,29 @@ class Answer < ApplicationRecord
       update!(best: true)
     end
   end
+
+  def links_to_hash
+    return unless links.any?
+
+    gists = []
+    simple_links = []
+    hash = {}
+
+    links.map do |link|
+      if link.gist?
+        gists << { name: link.name, content: link.gist_content }
+      else
+        simple_links << { name: link.name, url: link.url }
+      end
+    end
+
+    hash[:gists] = gists if gists
+    hash[:simple_links] = simple_links if simple_links
+    
+    hash
+  end
+
+  def files_links_to_hash
+    files.map.with_object({}) { |file, hash| hash[file.filename.to_s] = url_for(file) }
+  end
 end
