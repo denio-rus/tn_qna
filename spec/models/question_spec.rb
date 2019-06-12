@@ -15,6 +15,8 @@ RSpec.describe Question, type: :model do
   it { should accept_nested_attributes_for :reward }
 
   it_behaves_like 'votable'
+  it_behaves_like 'linkable'
+  it_behaves_like 'attachable'
 
   it 'returns best answer' do
     question.answers.order(id: :desc)[3].set_best
