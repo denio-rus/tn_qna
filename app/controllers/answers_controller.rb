@@ -42,13 +42,11 @@ class AnswersController < ApplicationController
 
     ActionCable.server.broadcast(
       "answers_for_question_#{@question.id}",
-      {
-        answer: @answer,
-        links: @answer.links_to_hash
+      { answer: @answer,
+        links: @answer.links_in_hash,
         rating: @answer.rating,
-        files: @answer.files_links_to_hash
-      }
-    )
+        files: @answer.file_links_in_hash,
+        question_user_id: @question.user_id})
   end
 
   def find_answer

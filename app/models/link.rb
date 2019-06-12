@@ -6,7 +6,7 @@ class Link < ApplicationRecord
 
   def gist_content
     gist = Octokit.gist(parse_gist_id(url))
-    gist.files.map.with_object({}) { |(file, val), hash| hash[file] = val[:content] }
+    gist.files.map.with_object([]) { |(file, val), arr| arr << { filename: file, content: val[:content] } }
   end
 
   def gist?

@@ -5,5 +5,5 @@ $ ->
     ,
 
     received: (data) ->
-      $('.question_list').append data
+      $('.question_list').append(data)
   })

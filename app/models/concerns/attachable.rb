@@ -7,7 +7,8 @@ module Attachable
 
   def file_links_in_hash
     files.map.with_object([]) do |file, arr| 
-      arr << { name: file.filename.to_s, 
+      arr << { id: file.id,
+               name: file.filename.to_s, 
                url: Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true) }
     end
   end

@@ -1,0 +1,53 @@
+div class="answer-#{@answer.id}"
+  p= @answer.body
+
+  .voting-answer
+    p class="rating-answer-#{@answer.id}"
+      | rating: #{@rating}
+      
+    p.voting-answer-links
+      -if gon.user_id && gon.user_id != @answer.user_id
+        a href="/answers/#{@answer.id}/unvote" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Unvote
+        br
+        a href="/answers/#{@answer.id}/dislike" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Dislike
+        br
+        a href="/answers/#{@answer.id}/like" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Like
+  
+  .links
+    -if @links
+      -for l in @links
+        -if l.gist_files
+          -for f in l.gist_files
+            p= f.filename
+            textarea= f.content
+            -if gon.user_id && gon.user_id == @answer.user_id
+              a href="/links/#{l.id}" data-method='delete' data-remote='true' rel='nofollow' Delete link 
+        -else
+          p
+            a href='#{l.url}' #{l.name}
+            br
+            -if gon.user_id && gon.user_id == @answer.user_id
+              a href="/links/#{l.id}" data-method='delete' data-remote='true' rel='nofollow' Delete link
+
+  .attachments
+    -if @files
+      - for f in @files
+        p 
+          a href="#{f.url}"  #{f.name}
+          br
+          -if gon.user_id && gon.user_id == @answer.user_id
+            a href="/attachments/#{f.id}" data-method='delete' data-remote='true' rel='nofollow' Delete file
+
+  
+  -if gon.user_id && gon.user_id == @answer.user_id
+    p 
+      a href='#' class="edit-answer-link" data-answer-id="#{@answer.id}" Edit answer
+      br 
+      a href='/answers/#{@answer.id}' data-method='delete' data-remote='true' Delete answer
+
+  -if gon.user_id && gon.user_id == @question_user_id && @answer.best != true
+    p
+      a href="/answers/#{@answer.id}/best" data-method='post' data-remote='true' Make it the best answer
+
+
+ 
