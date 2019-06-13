@@ -1,0 +1,7 @@
+= form_with model: @comment, url: polymorphic_url(resource, action: :create_comment), data: { type: :json } do |f|
+  = f.label :body, "Your comment"
+  = f.text_field :body
+  = f.submit 'Save comment'
+  
+.comment-errors
+  = render 'shared/errors', resource: @comment

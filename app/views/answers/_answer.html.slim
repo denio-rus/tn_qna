@@ -39,7 +39,16 @@
           =link_to file.filename.to_s, url_for(file)
           br
           -if current_user&.author_of?(answer)
-            =link_to 'Delete file', attachment_path(file), method: :delete, remote: true         
+            =link_to 'Delete file', attachment_path(file), method: :delete, remote: true  
+
+  - if current_user
+    .[class='comment-answer-#{answer.id}']
+      = render answer.comments
+
+      .answer-new-comment
+        p= link_to 'Add comment', '#', class: 'add-comment-link', data: { answer_id: answer.id }
+        .[class='form-comment-answer-#{answer.id} hidden']
+          = render 'comments/form', resource: answer
 
   -if current_user&.author_of?(answer)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 

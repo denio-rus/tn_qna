@@ -11,7 +11,7 @@ module Commented
 
     respond_to do |format|
       if @comment.save
-        format.json { render json: @comment }
+        format.json { render json: { comment: @comment, user: current_user.email} }
       else
         format.json do 
           render json: @comment.errors.full_messages, status: :unprocessable_entity

@@ -14,6 +14,7 @@ class QuestionsController < ApplicationController
     @answers = question.answers.best_first
     @answer = Answer.new
     @answer.links.new
+    @comment = Comment.new
     gon.question_id = question.id
   end
 

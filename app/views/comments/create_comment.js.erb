@@ -1,0 +1,6 @@
+$('.form-comment-<%= @comment.commentable.class.underscore%>-<%= @comment.commentable.id%> .comment-errors').html('<%= render 'shared/errors', resource: @comment %>');
+
+<% if @comment.persisted? %>
+  $(".comment-<%= @comment.commentable.class.underscore%>-<%= @comment.commentable.id%>").append('<%= j render @comment %>');
+  $('.form-comment-<%= @comment.commentable.class.underscore%>-<%= @comment.commentable.id%>').addClass('hidden');
+<% end %>
