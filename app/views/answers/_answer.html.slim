@@ -41,10 +41,10 @@
           -if current_user&.author_of?(answer)
             =link_to 'Delete file', attachment_path(file), method: :delete, remote: true  
 
-  - if current_user
-    .[class='comment-answer-#{answer.id}']
-      = render answer.comments
+  .[class='comment-answer-#{answer.id}']
+    = render answer.comments
 
+    - if current_user
       .answer-new-comment
         p= link_to 'Add comment', '#', class: 'add-comment-link', data: { answer_id: answer.id }
         .[class='form-comment-answer-#{answer.id} hidden']

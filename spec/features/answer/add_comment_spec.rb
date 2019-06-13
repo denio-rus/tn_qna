@@ -9,16 +9,57 @@ feature 'User can add comments to an answer', %q{
   given(:answer) { create(:answer) }
 
   describe 'an authenticated user', js: true do
-    scenario 'adds comment to the answer' do
+    before do 
       sign_in(user)
       visit question_path(answer.question)
-      
+    end
+
+    scenario 'adds comment to the answer' do
       within(".answer-#{answer.id}") do
         click_on 'Add comment'
         fill_in "Your comment", with: 'My awesome comment'
         click_on 'Save comment'
 
         expect(page).to have_content 'My awesome comment'
+      end
+    end
+
+    scenario 'adds comment to the answer with errors' do
+      within(".answer-#{answer.id}") do
+        click_on 'Add comment'
+        click_on 'Save comment'
+
+        expect(page).to_not have_content 'My awesome comment'
+        expect(page).to have_content "Body can't be blank"
+      end
+    end
+  end
+
+  context 'multiple sessions', js: true do
+    scenario "comment appears on another user's page" do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(answer.question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(answer.question)
+      end
+
+      Capybara.using_session('user') do
+        within(".answer-#{answer.id}") do
+          click_on 'Add comment'
+          fill_in "Your comment", with: 'My awesome comment'
+          click_on 'Save comment'
+  
+          expect(page).to have_content 'My awesome comment'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within(".answer-#{answer.id}") do
+        expect(page).to have_content 'My awesome comment'
+        end
       end
     end
   end

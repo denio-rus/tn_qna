@@ -48,10 +48,11 @@ p= question.body
     = question.reward.title
     = image_tag question.reward.image
 
-- if current_user
-  .[class='comment-question-#{question.id}']
-    = render question.comments
-    
+
+.[class='comment-question-#{question.id}']
+  = render question.comments
+  
+  - if current_user  
     .question-new-comment
       p= link_to 'Add comment', '#', class: 'add-comment-link', data: { question_id: question.id }
       .[class='form-comment-question-#{question.id} hidden']

@@ -14,17 +14,18 @@ $(document).on('turbolinks:load', function(){
     var user = e.detail[0]['user'];
 
     if (comment.commentable_type == 'Question') {
-      $('.comment-question-'+ comment.commentable_id).prepend('<p>'+ user + ' said:<br>' + comment.body +'</p>')
-      $('.form-comment-question-'+ comment.commentable_id).addClass('hidden')
-    }
+      $('.comment-question-'+ comment.commentable_id).prepend('<p>'+ user + ' said:<br>' + comment.body +'</p>');
+      $('.form-comment-question-'+ comment.commentable_id).addClass('hidden');
+    };
     if (comment.commentable_type == 'Answer') {
-      $('.comment-answer-'+ comment.commentable_id).prepend('<p>'+ user + ' sayd:<br>' + comment.body +'</p>')
-      $('.form-comment-answer-'+ comment.commentable_id).addClass('hidden')
-    }
+      $('.comment-answer-'+ comment.commentable_id).prepend('<p>'+ user + ' sayd:<br>' + comment.body +'</p>');
+      $('.form-comment-answer-'+ comment.commentable_id).addClass('hidden');
+    };
   })
     .on('ajax:error', function (e) {
       var errors = e.detail[0];
       $.each(errors, function(index, value) {
+        console.log(errors)
         $('.comment-errors').html('');
         $('.comment-errors').append('<p>' + value + '</p>');
       });
