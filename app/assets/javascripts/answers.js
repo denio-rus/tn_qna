@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function(){
     var answer = e.detail[0];
     console.log(answer)
 
-    $('.answers').append('<p>' + answer.body + '</p>');
+    $('.answers').append(JST['templates/answers/answer'] (answer));
   })
     .on('ajax:error', function (e) {
       var errors = e.detail[0];

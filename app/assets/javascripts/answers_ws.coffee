@@ -5,6 +5,6 @@ $ ->
     ,
 
     received: (data) ->
-      console.log(data);
-      $('.answers').append(JST['templates/answers/answer'] (data));
+      if data.answer.user_id != gon.user_id 
+        $('.answers').append(JST['templates/answers/answer'] (data));
   })

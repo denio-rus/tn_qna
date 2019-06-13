@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
     
     respond_to do |format|
       if @answer.save
-        format.json { render json: @answer }
+        format.json { render json: answer_object_for_jst }
       else
         format.json do 
           render json: @answer.errors.full_messages, status: :unprocessable_entity
@@ -40,13 +40,17 @@ class AnswersController < ApplicationController
   def publish_answer
     return if @answer.errors.any?
 
-    ActionCable.server.broadcast(
-      "answers_for_question_#{@question.id}",
-      { answer: @answer,
-        links: @answer.links_in_hash,
-        rating: @answer.rating,
-        files: @answer.file_links_in_hash,
-        question_user_id: @question.user_id})
+    ActionCable.server.broadcast("answers_for_question_#{@question.id}", answer_object_for_jst)
+  end
+
+  def answer_object_for_jst
+    { 
+      answer: @answer,
+      links: @answer.links_in_hash,
+      rating: @answer.rating,
+      files: @answer.file_links_in_hash,
+      question_user_id: @answer.question.user_id
+    }
   end
 
   def find_answer
