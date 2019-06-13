@@ -9,9 +9,13 @@ Rails.application.routes.draw do
       patch :unvote
     end
   end
+
+  concern :commentable do 
+    member { post :create_comment }
+  end
   
-  resources :questions, except: :edit, concerns: [:votable] do 
-    resources :answers, only: [:create, :destroy, :update], shallow: true, concerns: [:votable] do
+  resources :questions, except: :edit, concerns: [:votable, :commentable] do 
+    resources :answers, only: [:create, :destroy, :update], shallow: true, concerns: [:votable, :commentable] do
       post 'best', on: :member
     end
   end

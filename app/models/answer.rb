@@ -2,6 +2,7 @@ class Answer < ApplicationRecord
   include Votable
   include Linkable
   include Attachable
+  include Commentable
   
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
   belongs_to :question
