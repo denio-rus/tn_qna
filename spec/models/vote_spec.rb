@@ -5,7 +5,7 @@ RSpec.describe Vote, type: :model do
   let(:question) { create(:question) }
   
   it { should belong_to :votable }
-  it { should belong_to(:user).dependent(:destroy) }
+  it { should belong_to(:user) }
 
   it { should validate_uniqueness_of(:user_id).scoped_to([:votable_id, :votable_type]) }
 

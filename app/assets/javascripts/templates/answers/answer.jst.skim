@@ -7,11 +7,11 @@ div class="answer-#{@answer.id}"
       
     p.voting-answer-links
       -if gon.user_id && gon.user_id != @answer.user_id
-        a href="/answers/#{@answer.id}/unvote" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Unvote
+        a href="/answers/#{@answer.id}/unvote" data-remote='true' data-type='json' data-answer-id='#{answer.id}' data-method='patch' rel='nofollow' Unvote
         br
-        a href="/answers/#{@answer.id}/dislike" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Dislike
+        a href="/answers/#{@answer.id}/dislike" data-remote='true' data-type='json' data-answer-id='#{answer.id}' data-method='patch' rel='nofollow' Dislike
         br
-        a href="/answers/#{@answer.id}/like" data-remote='true' data-type='json' data-answer-id='@id' data-method='patch' rel='nofollow' Like
+        a href="/answers/#{@answer.id}/like" data-remote='true' data-type='json' data-answer-id='#{answer.id}' data-method='patch' rel='nofollow' Like
   
   .links
     -if @links

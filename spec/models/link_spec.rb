@@ -14,7 +14,7 @@ RSpec.describe Link, type: :model do
   let(:link) { create(:link, :for_answer, url: 'http://yandex.ru') }
 
   it 'returns hash with filenames and content from gist' do
-    expect(link_gist.gist_content).to eq(:'gist_for_test.txt' => "It's a test gist.")
+    expect(link_gist.gist_content).to eq [{:content=>"It's a test gist.", :filename=>:"gist_for_test.txt"}]
   end
 
   it 'returns true then link is gist on github' do

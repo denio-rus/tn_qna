@@ -8,8 +8,6 @@ $(document).on('turbolinks:load', function(){
 
   $('form.new-answer').on('ajax:success', function(e) {
     var answer = e.detail[0];
-    console.log(answer)
-
     $('.answers').append(JST['templates/answers/answer'] (answer));
   })
     .on('ajax:error', function (e) {
