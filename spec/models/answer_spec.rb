@@ -12,6 +12,8 @@ RSpec.describe Answer, type: :model do
   it { should accept_nested_attributes_for :links }
 
   it_behaves_like 'votable'
+  it_behaves_like 'linkable'
+  it_behaves_like 'attachable'
 
   it "set the best answer to the question, it's only one" do
     question.answers.last.set_best

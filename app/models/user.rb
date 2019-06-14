@@ -6,10 +6,11 @@ class User < ApplicationRecord
 
   has_many :questions, inverse_of: :author, dependent: :nullify
   has_many :answers, inverse_of: :author, dependent: :nullify 
-  has_many :rewards, dependent: :nullify 
+  has_many :rewards, dependent: :nullify
+  has_many :votes, dependent: :destroy
+  has_many :comments, dependent: :nullify
 
   def author_of?(resource)
     id == resource.user_id
   end
-  
 end

@@ -1,1 +1,0 @@
-HandlebarsAssets::Config.slim_options

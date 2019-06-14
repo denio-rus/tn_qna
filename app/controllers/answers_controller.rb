@@ -1,9 +1,11 @@
 class AnswersController < ApplicationController
   include Voted
+  include Commented
 
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
   before_action :find_answer, only: [:update, :destroy, :best]
+  after_action :publish_answer, only: [:create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -11,7 +13,7 @@ class AnswersController < ApplicationController
     
     respond_to do |format|
       if @answer.save
-        format.json { render json: @answer }
+        format.json { render json: answer_object_for_jst }
       else
         format.json do 
           render json: @answer.errors.full_messages, status: :unprocessable_entity
@@ -34,6 +36,22 @@ class AnswersController < ApplicationController
   end
  
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast("answers_for_question_#{@question.id}", answer_object_for_jst)
+  end
+
+  def answer_object_for_jst
+    { 
+      answer: @answer,
+      links: @answer.links_in_hash,
+      rating: @answer.rating,
+      files: @answer.file_links_in_hash,
+      question_user_id: @answer.question.user_id
+    }
+  end
 
   def find_answer
     @answer = Answer.with_attached_files.find(params[:id])

@@ -1,0 +1,5 @@
+p
+  = @user
+  |  said:
+  br
+  = @comment.body

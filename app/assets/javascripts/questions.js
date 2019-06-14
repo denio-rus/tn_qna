@@ -8,6 +8,6 @@ $(document).on('turbolinks:load', function(){
 
   $('.question-voting').on('ajax:success', function(e) {
     var voting = e.detail[0];
-    $('.question-rating').html('rating: ' + voting.rating)
+    $('p.question-rating').html('rating: ' + voting.rating)
   });
 });
