@@ -43,6 +43,8 @@ gem "cocoon"
 gem 'octokit'
 gem 'gon'
 gem 'skim'
+gem 'omniauth'
+gem 'omniauth-github'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
