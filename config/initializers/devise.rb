@@ -263,7 +263,11 @@ Devise.setup do |config|
                   Rails.application.credentials[Rails.env.to_sym][:github][:app_id],
                   Rails.application.credentials[Rails.env.to_sym][:github][:app_secret],
                   scope: 'user:email, read:user'
-
+  
+  config.omniauth :vkontakte,
+                  Rails.application.credentials[Rails.env.to_sym][:vkontakte][:app_id],
+                  Rails.application.credentials[Rails.env.to_sym][:vkontakte][:app_secret],
+                  scope: 'email'
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
@@ -299,4 +303,5 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+  config.reconfirmable = false
 end

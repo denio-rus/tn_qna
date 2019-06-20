@@ -45,6 +45,7 @@ gem 'gon'
 gem 'skim'
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-vkontakte'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
