@@ -16,12 +16,16 @@ class Services::FindForOauth
       create_authorization(user)
     elsif email
       password = Devise.friendly_token[0, 20]
-      user = User.create(email: email, password: password, password_confirmation: password)
+      user = User.new(email: email, password: password, password_confirmation: password)
+      user.skip_confirmation_notification!
       user.confirm
+      user.save
       create_authorization(user)
     else
       password = Devise.friendly_token[0, 20]
-      user = User.create(email: 'no_email_given@site.om', password: password, password_confirmation: password)
+      user = User.new(email: 'no_email_given@site.om', password: password, password_confirmation: password)
+      user.skip_confirmation_notification!
+      user.save
       create_authorization(user)
     end
 
