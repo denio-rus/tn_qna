@@ -5,7 +5,7 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_oauth(request.env['omniauth.auth'])
     
     if @user&.persisted?
-      sign_in_existed_user(@user, 'Github') 
+      sign_in_existed_user(@user) 
     else 
       redirect_to root_path, alert: 'Something went wrong'
     end
@@ -15,7 +15,7 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_oauth(request.env['omniauth.auth'])
 
     if @user&.persisted? && @user.email != 'no_email_given@site.om'
-      sign_in_existed_user(@user, 'Vkontakte') 
+      sign_in_existed_user(@user) 
     elsif @user&.persisted? && @user.email == 'no_email_given@site.om'
       request_email
     else
@@ -25,9 +25,9 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
 
   private
 
-  def sign_in_existed_user(user, provider)
+  def sign_in_existed_user(user)
     sign_in_and_redirect user, event: :authentication
-    set_flash_message(:notice, :success, kind: provider) if is_navigational_format?
+    set_flash_message(:notice, :success, kind: action_name.capitalize) if is_navigational_format?
   end
 
   def request_email

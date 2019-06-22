@@ -6,7 +6,7 @@ RSpec.describe User::RegistrationsController, type: :controller do
       @request.env["devise.mapping"] = Devise.mappings[:user] 
     end
 
-    let(:user) { create(:user, email: 'no_email_given@site.om' ) }
+    let(:user) { create(:user, :not_confirmed, email: 'no_email_given@site.om' ) }
 
     it 'assigns the asked user to @user' do 
       patch :ask_email_for_oauth, params: { id: user, user: { email: 'new@mail.com' } }
