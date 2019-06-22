@@ -16,14 +16,24 @@ feature 'User can register', %q{
       fill_in 'user_password_confirmation', with: '12345678'
       click_on 'Sign up'
 
-      expect(page).to have_content "Welcome! You have signed up successfully."
+      open_email 'test_user@email.com'
+      current_email.click_link 'Confirm my account'
+
+      visit root_path
+      click_on 'Sign in'
+
+      fill_in 'Email', with: 'test_user@email.com'
+      fill_in 'user_password', with: '12345678'
+      click_on 'Log in'
+
+      expect(page).to have_content "Signed in successfully."
     end
 
     scenario 'tries to register with errors' do 
       fill_in 'user_password_confirmation', with: '2222222'
       click_on 'Sign up'
 
-      expect(page).to_not have_content "Welcome! You have signed up successfully."
+      expect(page).to_not have_content "Signed in successfully."
     end
   end
 end

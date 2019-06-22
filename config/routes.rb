@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks', registrations: 'users/registrations' }
   root to: 'questions#index'
-
+  
+  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks', registrations: 'user/registrations' }
   devise_scope :user do
     patch 'users/:id/ask_email_for_oauth/', to: 'user/registrations#ask_email_for_oauth', as: 'user'
   end
@@ -28,5 +28,6 @@ Rails.application.routes.draw do
   resources :links, only: :destroy
   resources :rewards, only: :index
 
+  default_url_options host: 'localhost:3000'
   mount ActionCable.server => '/cable'
 end

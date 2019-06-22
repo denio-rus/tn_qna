@@ -39,29 +39,70 @@ RSpec.describe Services::FindForOauth do
     context 'user does not exists' do
       let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '12345', info: { email: 'new@user.com' }) }
 
-      it 'creates new user' do 
-        expect { subject.call }.to change(User, :count).by(1)
+      context 'if provider gives email' do
+        it 'creates new user' do 
+          expect { subject.call }.to change(User, :count).by(1)
+        end
+
+        it 'autoconfirms email' do 
+          user = subject.call
+          expect(user).to be_confirmed
+        end
+  
+        it 'returns new user' do 
+          expect(subject.call).to be_a(User)
+        end
+  
+        it 'fills user email' do
+          user = subject.call
+          expect(user.email).to eq auth.info[:email]
+        end
+  
+        it 'creates authorization for user' do 
+          user = subject.call
+          expect(user.authorizations).to_not be_empty
+        end
+  
+        it 'creates authorization with provider and uid' do
+          authorization = subject.call.authorizations.first
+  
+          expect(authorization.provider).to eq auth.provider
+          expect(authorization.uid).to eq auth.uid
+        end
       end
+      
+      context 'if provider does not give email' do
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '12345', info: {}) }
 
-      it 'returns new user' do 
-        expect(subject.call).to be_a(User)
-      end
-
-      it 'fills user email' do
-        user = subject.call
-        expect(user.email).to eq auth.info[:email]
-      end
-
-      it 'creates authorization for user' do 
-        user = subject.call
-        expect(user.authorizations).to_not be_empty
-      end
-
-      it 'creates authorization with provider and uid' do
-        authorization = subject.call.authorizations.first
-
-        expect(authorization.provider).to eq auth.provider
-        expect(authorization.uid).to eq auth.uid
+        it 'creates new user' do 
+          expect { subject.call }.to change(User, :count).by(1)
+        end
+        
+        it 'does not autoconfirms email' do 
+          user = subject.call
+          expect(user).to_not be_confirmed
+        end
+  
+        it 'returns new user' do 
+          expect(subject.call).to be_a(User)
+        end
+  
+        it "fills user email with no_email_given@site.om" do
+          user = subject.call
+          expect(user.email).to eq 'no_email_given@site.om'
+        end
+  
+        it 'creates authorization for user' do 
+          user = subject.call
+          expect(user.authorizations).to_not be_empty
+        end
+  
+        it 'creates authorization with provider and uid' do
+          authorization = subject.call.authorizations.first
+  
+          expect(authorization.provider).to eq auth.provider
+          expect(authorization.uid).to eq auth.uid
+        end
       end
     end
   end
