@@ -45,4 +45,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_cable.disable_request_forgery_protection = true
+  
+  OmniAuth.config.test_mode = true
 end
