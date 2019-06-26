@@ -6,10 +6,14 @@ module Voted
     before_action :find_vote, only: [:like, :dislike, :unvote]
   end
 
+  # in controller included Voted need to add: skip_authorize_resource only: [:like, :dislike, :unvote]
+
   def like
     if @vote
+      authorize! :like, @vote
       @vote.like
     else 
+      authorize! :create_vote, @votable.votes.new
       @votable.votes.create(user: current_user, nominal: 'like')
     end
 
@@ -18,8 +22,10 @@ module Voted
 
   def dislike
     if @vote
+      authorize! :dislike, @vote
       @vote.dislike
     else 
+      authorize! :create_vote, @votable.votes.new
       @votable.votes.create(user: current_user, nominal: 'dislike')
     end
 
@@ -27,6 +33,7 @@ module Voted
   end
 
   def unvote
+    authorize! :unvote, @vote
     @vote.unvote if @vote
 
     rating_respond_with_json

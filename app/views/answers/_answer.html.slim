@@ -7,13 +7,15 @@
       = answer.rating
       
     p.voting-answer-links
-      -if current_user && current_user != answer.author
+      -if can? :unvote, answer.vote_of(current_user)
         =link_to 'Unvote', unvote_answer_path(answer), method: :patch, 
                   data: { type: :json, answer_id: answer.id }, remote: true
         br
+      -if can?(:dislike, answer.vote_of(current_user)) || can?(:create_vote, answer.votes.new)
         =link_to "Dislike", dislike_answer_path(answer), method: :patch, 
                   data: { type: :json, answer_id: answer.id }, remote: true
         br
+      -if can?(:like, answer.vote_of(current_user)) || can?(:create_vote, answer.votes.new)
         =link_to "Like", like_answer_path(answer), method: :patch, 
                   data: { type: :json, answer_id: answer.id }, remote: true
                   
@@ -25,12 +27,12 @@
         - link.gist_content.map do |file|
           p= file[:filename]
           textarea= file[:content]
-          = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(answer)
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, answer
       -else
         p
           = link_to link.name, link.url
           br
-          = link_to 'Delete link', link_path(link), method: :delete, remote: true if current_user&.author_of?(answer)
+          = link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, answer
   
   .attachments
     -if answer.files.attached?
@@ -38,23 +40,24 @@
         p
           =link_to file.filename.to_s, url_for(file)
           br
-          -if current_user&.author_of?(answer)
+          -if can? :destroy, file
             =link_to 'Delete file', attachment_path(file), method: :delete, remote: true  
 
   .[class='comment-answer-#{answer.id}']
     = render answer.comments
 
-    - if current_user
+    - if can? :create_comment, Comment
       .answer-new-comment
         p= link_to 'Add comment', '#', class: 'add-comment-link', data: { answer_id: answer.id }
         .[class='form-comment-answer-#{answer.id} hidden']
           = render 'comments/form', resource: answer
 
-  -if current_user&.author_of?(answer)
-    p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 
-    p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true 
+  -if can? :update, answer
+    p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } 
+  -if can? :destroy, answer
+    p = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true 
   
-  -if current_user&.author_of?(answer.question) && answer.question.best_answer != answer
+  -if can?(:best, answer) && (answer.question.best_answer != answer)
     p= link_to 'Make it the best answer', best_answer_path(answer), method: :post, remote: true
 
   =form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|

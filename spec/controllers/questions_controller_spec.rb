@@ -151,9 +151,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect(body).to eq question.body
         end
 
-        it 'renders update view' do
+        it 'responds with status forbidden' do
           patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-          expect(response).to render_template :update
+          expect(response).to have_http_status :forbidden
         end
       end
     end
@@ -182,9 +182,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      it 'redirects to show question page' do
+      it 'redirects to root page' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to question
+        expect(response).to redirect_to root_path
       end
     end
   end

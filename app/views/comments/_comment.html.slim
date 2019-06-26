@@ -1,5 +1,5 @@
 p
-  = comment.author.email
+  = comment.author ? comment.author.email : 'Deleted user'
   |  said:
   br
   = comment.body

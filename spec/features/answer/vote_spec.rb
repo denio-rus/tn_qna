@@ -38,9 +38,11 @@ feature 'user can voting for best and worst answers', %q{
 
     scenario 'unvotes' do
       liked_answer = question.answers.last
+      create(:vote, votable: liked_answer, user: user)
+      visit question_path(question)
 
       within(".answer-#{liked_answer.id}") do
-        click_on('Like')
+        expect(page).to have_content 'rating: 1'
 
         click_on('Unvote')
         expect(page).to have_content 'rating: 0'

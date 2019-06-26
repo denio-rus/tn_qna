@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   before_action :set_user_id_for_js
 
+  check_authorization unless: :devise_controller?
+
   private 
 
   def set_user_id_for_js
@@ -8,8 +10,10 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, alert: exception.message
+    respond_to do |format|
+      format.js { head :forbidden }
+      format.json { head :forbidden }
+      format.html { redirect_to root_path, alert: exception.message }
+    end
   end
-  
-  check_authorization
 end
