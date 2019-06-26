@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class User::RegistrationsController < Devise::RegistrationsController
-  skip_authorization_check
-
   # PATCH /users/:id/ask_email_for_oauth
   def ask_email_for_oauth
     @user = User.find(params[:id])
