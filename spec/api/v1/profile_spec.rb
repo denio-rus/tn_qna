@@ -31,4 +31,33 @@ describe 'Profiles API', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/profiles/others' do
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
+      let(:api_path) { '/api/v1/profiles/others' }
+    end
+
+    context 'authorized' do 
+      let(:me) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let!(:other_users) { create_list(:user, 4) }
+
+      before { get '/api/v1/profiles/others', params: { access_token: access_token.token },headers: headers }
+
+      it 'returns 200 status' do 
+        expect(response).to be_successful
+      end
+
+      it "returns all other user's profiles" do 
+        expect(json['users'].size).to eq 4
+      end
+
+      it 'does not return user profile' do 
+        json['users'].each do |user|
+          expect(user['id']).to_not eq me.id
+        end
+      end
+    end
+  end
 end
