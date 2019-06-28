@@ -48,6 +48,8 @@ gem 'omniauth-github'
 gem 'omniauth-vkontakte'
 gem 'cancancan'
 gem 'doorkeeper'
+gem 'active_model_serializers', '~> 0.10.0'
+gem 'oj'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
