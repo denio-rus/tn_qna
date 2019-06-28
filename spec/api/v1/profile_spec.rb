@@ -20,13 +20,13 @@ describe 'Profiles API', type: :request do
 
       it 'returns all public fields' do 
         %w[id email admin created_at updated_at].each do |attr|
-          expect(json[attr]).to eq me.send(attr).as_json
+          expect(json['user'][attr]).to eq me.send(attr).as_json
         end
       end
 
       it 'does not return private fields' do 
         %w[password encrypted_password].each do |attr|
-          expect(json).to_not have_key(attr)
+          expect(json['user']).to_not have_key(attr)
         end
       end
     end
