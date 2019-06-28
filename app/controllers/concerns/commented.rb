@@ -7,6 +7,7 @@ module Commented
   end
 
   def create_comment
+    authorize! :create_comment, Comment
     gon.question_id = question_id
     @comment = @commentable.comments.new(comment_params)
     @comment.author = current_user

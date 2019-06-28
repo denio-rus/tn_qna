@@ -46,13 +46,14 @@ gem 'skim'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-vkontakte'
-gem 'letter_opener'
+gem 'cancancan'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
   gem 'capybara-email'
+  gem 'letter_opener'
 end
 
 group :development do

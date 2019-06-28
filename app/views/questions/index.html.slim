@@ -1,6 +1,8 @@
 h1 List all questions
 ul.question_list
   =render partial: 'question_inline', collection: @questions, as: :question if @questions
+-if can?(:create, Question)
+  p= link_to 'Ask question', new_question_path
 
-p= link_to 'Ask question', new_question_path
-p= link_to 'My rewards', rewards_path
+-if current_user
+  p= link_to 'My rewards', rewards_path

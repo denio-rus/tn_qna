@@ -32,8 +32,8 @@ RSpec.describe AttachmentsController, type: :controller do
         expect(answer.reload.files).to be_attached
       end
   
-      it 'renders delete_attachment view' do
-        expect(response).to render_template :destroy
+      it 'responds with status forbidden' do
+        expect(response).to have_http_status :forbidden
       end
     end
 
@@ -62,8 +62,8 @@ RSpec.describe AttachmentsController, type: :controller do
         expect(question.reload.files).to be_attached
       end
 
-      it 'renders delete_attachment view' do
-        expect(response).to render_template :destroy
+      it 'responds with status forbidden' do
+        expect(response).to have_http_status :forbidden
       end
     end
   end
