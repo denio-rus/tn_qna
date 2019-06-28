@@ -47,6 +47,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-vkontakte'
 gem 'cancancan'
+gem 'doorkeeper'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
