@@ -1,5 +1,5 @@
 class AnswerSerializer < ActiveModel::Serializer
-  attributes :id, :body, :best, :created_at, :updated_at
+  attributes :id, :body, :best, :question_id, :created_at, :updated_at
   
   belongs_to :author
   has_many :comments
