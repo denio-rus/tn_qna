@@ -39,7 +39,9 @@ Rails.application.routes.draw do
         get :others, on: :collection
       end
 
-      resources :questions, only: [:index, :show]
+      resources :questions, only: [:index, :show, :create, :update, :destroy] do
+        resources :answers, only: [:index, :show, :create, :update, :destroy], shallow: true
+      end
     end
   end
 end
