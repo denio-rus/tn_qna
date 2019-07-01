@@ -74,6 +74,8 @@ RSpec.configure do |config|
   config.include(OmniauthMacros)
 end
 
+Rails.application.routes.default_url_options[:host] = 'http://www.example.com'
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec

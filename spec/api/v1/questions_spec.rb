@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'Questions API', type: :request do
   let(:headers) { { 'CONTENT_TYPE' => 'applicatipon/json',
                     'ACCEPT' => 'application/json' } }
+                    
   describe 'GET /api/v1/questions' do 
     it_behaves_like 'API Authorizable' do 
       let(:method) { :get }
@@ -67,8 +68,7 @@ describe 'Questions API', type: :request do
 
     context "authorized" do
       let(:access_token) { create(:access_token) }
-      let!(:answers) { create_list(:answer, 3, question: question) }
-      let!(:comments) { create_list(:comment, 3, commentable: question) }
+      
       let(:question_response) { json['question'] }
       
       before { get api_path, params: { access_token: access_token.token },headers: headers }
@@ -86,24 +86,18 @@ describe 'Questions API', type: :request do
       it 'contains user object' do
         expect(question_response['author']['id']).to eq question.user_id
       end
-  
-      it 'returns all comments to the question' do 
-        expect(question_response['comments'].size).to eq 3
-      end    
-  
-      it 'contains comments objects' do
-        question_response['comments'].each do |comment|
-          expect(question.comments.ids).to include comment['id'].to_i
-        end
-      end
 
-      it 'returns all comments to the question' do 
-        expect(question_response['comments'].size).to eq 3
-      end    
+      context 'assocciated objects' do 
+        let(:resource) { question }
+        let(:resource_response) { question_response }
+
+        it_behaves_like 'API resource with comments'
   
-      it 'contains comments objects' do
-        question_response['comments'].each do |comment|
-          expect(question.comments.ids).to include comment['id'].to_i
+        it_behaves_like 'API resource with links'
+        
+        it_behaves_like 'API resource with attached files' do 
+          let(:resource) { create(:question_with_attached_file) }
+          let(:api_path) { api_v1_question_path(resource) }
         end
       end
     end
