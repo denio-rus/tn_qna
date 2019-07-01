@@ -203,4 +203,42 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/v1/answers/:id' do
+    let(:answer) { create(:answer) }
+    let(:api_path) { api_v1_answer_path(answer) }
+
+    it_behaves_like 'API Authorizable' do 
+      let(:method) { :delete }
+    end 
+
+    context 'authorized' do
+      context "An author deletes his answer" do
+        let(:author_user) { User.find(access_token.resource_owner_id) }
+        let!(:answer) { create(:answer, author: author_user) }
+
+        it 'deletes his answer' do
+          expect { delete api_path, params: { access_token: access_token.token, headers: headers } }.to change(Answer, :count).by(-1)
+        end
+
+        it 'returns response with successfull status' do
+          delete api_path, params: { access_token: access_token.token, headers: headers }
+          expect(response).to be_successful
+        end
+      end
+    end
+
+    context "Some user tries to delete not his answer" do
+      let!(:answer) { create(:answer) }
+
+      it "doesn't delete the answer" do
+        expect { delete api_path, params: { access_token: access_token.token, headers: headers } }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to root page' do
+        delete api_path, params: { access_token: access_token.token, headers: headers }
+        expect(response).to have_http_status :forbidden
+      end
+    end
+  end
 end
