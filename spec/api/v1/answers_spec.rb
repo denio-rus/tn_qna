@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'Answers API', type: :request do
   let(:headers) { { 'CONTENT_TYPE' => 'applicatipon/json',
                     'ACCEPT' => 'application/json' } }
+  let(:access_token) { create(:access_token) }
   
   describe 'GET /api/v1/questions' do 
     let(:question) {create(:question_with_answers)}
@@ -13,7 +14,6 @@ describe 'Answers API', type: :request do
     end
                   
     context 'authorized' do 
-      let(:access_token) { create(:access_token) }
       let(:answer_response) { json['answers'].first }
 
       before { get api_path, params: { access_token: access_token.token },headers: headers }
@@ -47,7 +47,6 @@ describe 'Answers API', type: :request do
     end
 
     context "authorized" do
-      let(:access_token) { create(:access_token) }
       let(:answer_response) { json['answer'] }
       
       before { get api_path, params: { access_token: access_token.token },headers: headers }
@@ -78,6 +77,129 @@ describe 'Answers API', type: :request do
           let(:resource) { create(:answer_with_attached_file) }
           let(:api_path) { api_v1_answer_path(resource) }
         end
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/:question_id/answers' do
+    let(:question) { create(:question) }
+    let(:api_path) { api_v1_question_answers_path(question) }
+
+    it_behaves_like 'API Authorizable' do 
+      let(:method) { :post }
+    end 
+
+    context 'authorized' do 
+      context 'with valid attributes' do
+        it 'saves a new answer in the database' do
+          expect { post api_path, params: { access_token: access_token.token, 
+                                            answer: attributes_for(:answer), 
+                                            headers: headers }}.to change(Answer, :count).by(1)
+        end
+        
+        it 'returns 201 status' do 
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer), headers: headers }
+          expect(response.status).to eq 201
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'does not saves a new answer in the database' do
+          expect { post api_path, params: { access_token: access_token.token, 
+                                            answer: attributes_for(:answer, :invalid), 
+                                            headers: headers }}.to_not change(Answer, :count)
+        end
+
+        it 'returns errors object' do 
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid), headers: headers }
+          expect(json['body']).to eq ["can't be blank"]
+        end
+        
+        it 'returns 422 status' do 
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid), headers: headers }
+          expect(response.status).to eq 422
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let(:answer) { create(:answer) }
+    let(:api_path) { api_v1_answer_path(answer) }
+
+    it_behaves_like 'API Authorizable' do 
+      let(:method) { :patch }
+    end 
+
+    context 'authorized' do
+      context "An author" do
+        let(:author_user) { User.find(access_token.resource_owner_id) }
+        let(:answer) { create(:answer, author: author_user) }
+
+        context 'with valid attributes' do
+          before { patch api_path, params: { access_token: access_token.token, 
+                                             answer: { body: 'new body' }, 
+                                             headers: headers } }
+          
+          it 'changes answer attributes' do
+            answer.reload
+
+            expect(answer.body).to eq 'new body'
+          end
+
+          it 'returns 202 status' do 
+            expect(response.status).to eq 202
+          end          
+        end
+        
+        context 'with invalid attributes' do
+          it 'does not changes answer attributes' do
+            body = answer.body
+
+            patch api_path, params: { access_token: access_token.token, 
+                                      answer: { body: '' }, 
+                                      headers: headers }
+            answer.reload
+            
+            expect(body).to eq answer.body
+          end
+
+          it 'returns errors object' do 
+            patch api_path, params: { access_token: access_token.token, 
+                                      answer: { body: '' }, 
+                                      headers: headers }
+            expect(json['body']).to eq ["can't be blank"]
+          end
+
+          it 'returns 422 status' do 
+            patch api_path, params: { access_token: access_token.token, 
+                                      answer: { body: '' }, 
+                                      headers: headers }
+
+            expect(response.status).to eq 422
+          end  
+        end
+      end
+
+      context "Not an author tries to change answer" do
+        it 'does not change the answer' do
+          body = answer.body
+
+          patch api_path, params: { access_token: access_token.token, 
+                                    answer: { body: 'new body' }, 
+                                    headers: headers } 
+          answer.reload
+          
+          expect(body).to eq answer.body
+        end
+
+        it 'returns response with forbidden status' do
+          patch api_path, params: { access_token: access_token.token, 
+                                    answer: { body: 'new body' }, 
+                                    headers: headers } 
+
+          expect(response).to have_http_status :forbidden
+        end        
       end
     end
   end

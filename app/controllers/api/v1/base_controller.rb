@@ -3,6 +3,10 @@ class Api::V1::BaseController < ApplicationController
   before_action :doorkeeper_authorize!
 
   protect_from_forgery with: :null_session
+
+  rescue_from CanCan::AccessDenied do |e|
+    head :forbidden 
+  end
   
   private 
   
