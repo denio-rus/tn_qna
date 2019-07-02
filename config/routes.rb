@@ -34,13 +34,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :profiles, only: [] do
+      resources :profiles, only: [:index] do
         get :me, on: :collection
-        get :others, on: :collection
       end
 
-      resources :questions, only: [:index, :show, :create, :update, :destroy] do
-        resources :answers, only: [:index, :show, :create, :update, :destroy], shallow: true
+      resources :questions, except: [:edit, :new] do
+        resources :answers, except: [:edit, :new], shallow: true
       end
     end
   end
