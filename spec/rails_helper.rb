@@ -36,6 +36,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
+  config.include ApiHelpers, type: :request
 
   Capybara.javascript_driver = :selenium_chrome_headless
 
@@ -72,6 +73,8 @@ RSpec.configure do |config|
 
   config.include(OmniauthMacros)
 end
+
+Rails.application.routes.default_url_options[:host] = 'http://www.example.com'
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
