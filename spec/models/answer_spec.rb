@@ -41,4 +41,14 @@ RSpec.describe Answer, type: :model do
   it 'have many atteched files' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
+
+  describe 'new_answer_notification' do
+    let(:question) {create(:question)}
+    let(:answer) { build(:answer, question: question)}
+
+    it 'calls NewAnswerNotificationJob' do
+      expect(NewAnswerNotificationJob).to receive(:perform_later).with(answer)
+      answer.save!
+    end
+  end  
 end

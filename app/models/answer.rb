@@ -10,6 +10,8 @@ class Answer < ApplicationRecord
   validates :body, presence: true
   
   scope :best_first, -> { order(best: :desc) }
+  
+  after_create :notice_question_author
 
   def set_best
     transaction do
@@ -17,5 +19,9 @@ class Answer < ApplicationRecord
       question.reward.update!(user: author) if question.reward
       update!(best: true)
     end
+  end
+
+  def notice_question_author
+    NewAnswerNotificationJob.perform_later(self)
   end
 end
