@@ -12,6 +12,8 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  scope :created_for_day, -> { where(created_at: (1.day.ago .. Time.now)) }
+
   after_create :calculate_reputation
 
   def best_answer

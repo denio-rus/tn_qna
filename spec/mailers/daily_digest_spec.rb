@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe DailyDigestMailer, type: :mailer do
   describe "digest" do
-    let(:mail) { DailyDigestMailer.digest }
+    let(:user) { create(:user, email: "to@example.org") }
+    let(:mail) { DailyDigestMailer.digest(user) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Digest")
