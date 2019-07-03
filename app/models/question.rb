@@ -16,7 +16,7 @@ class Question < ApplicationRecord
 
   scope :created_for_day, -> { where(created_at: (1.day.ago .. Time.now)) }
 
-  after_create :calculate_reputation
+  after_create :calculate_reputation, :subscribe_author
 
   def best_answer
     answers.find_by(best: true)
@@ -26,5 +26,9 @@ class Question < ApplicationRecord
 
   def calculate_reputation
     ReputationJob.perform_later(self)
+  end
+
+  def subscribe_author
+    subscribes.create(user_id: user_id)
   end
 end

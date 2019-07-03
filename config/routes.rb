@@ -29,11 +29,13 @@ Rails.application.routes.draw do
     resources :answers, only: [:create, :destroy, :update], shallow: true, concerns: [:votable, :commentable] do
       post 'best', on: :member
     end
+    resources :subscribes, only: [:destroy, :create], shallow: true
   end
 
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
+  
 
   default_url_options host: 'localhost:3000'
   mount ActionCable.server => '/cable'

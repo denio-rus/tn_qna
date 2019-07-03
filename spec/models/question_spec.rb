@@ -37,4 +37,18 @@ RSpec.describe Question, type: :model do
       question.save!
     end
   end
+
+  describe 'subscribe author on creation' do
+    let(:question) {build(:question)}
+
+    it 'calls subscribe_author after create' do
+      expect(question).to receive(:subscribe_author)
+      question.save!
+    end
+    
+    it 'create subscribtion to question' do
+      question.save!
+      expect(question.subscribers.first).to eq question.author
+    end
+  end
 end

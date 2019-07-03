@@ -42,7 +42,7 @@ RSpec.describe Answer, type: :model do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 
-  describe 'new_answer_notification' do
+  describe '#notice_question_subscribers' do
     let(:question) {create(:question)}
     let(:answer) { build(:answer, question: question)}
 

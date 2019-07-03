@@ -1,5 +1,7 @@
 class Services::NewAnswerNotification
   def notice(answer)
-    NewAnswerNotificationMailer.notice(answer).deliver_later
+    answer.question.subscribers.each do |subscriber|
+      NewAnswerNotificationMailer.notice(subscriber, answer).deliver_later
+    end
   end
 end

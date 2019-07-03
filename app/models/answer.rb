@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
   
   scope :best_first, -> { order(best: :desc) }
   
-  after_create :notice_question_author
+  after_create :notice_question_subscribers
 
   def set_best
     transaction do
@@ -21,7 +21,7 @@ class Answer < ApplicationRecord
     end
   end
 
-  def notice_question_author
+  def notice_question_subscribers
     NewAnswerNotificationJob.perform_later(self)
   end
 end
