@@ -18,6 +18,7 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @answer.links.new
     @comment = Comment.new
+    @subscription = question.subscriptions.find_by(user_id: current_user.id) if current_user
     gon.question_id = question.id
   end
 

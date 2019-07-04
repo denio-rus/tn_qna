@@ -50,6 +50,12 @@ p= question.body
     = question.reward.title
     = image_tag question.reward.image
 
+.subscribe
+  -if can?(:create, Subscription) && !@subscription
+    p= link_to "Subscribe", question_subscriptions_path(question), method: :post
+  -if can?(:destroy, @subscription) && @subscription
+    p= link_to "Unsubscribe", subscription_path(@subscription), method: :delete
+
 
 .[class='comment-question-#{question.id}']
   = render question.comments

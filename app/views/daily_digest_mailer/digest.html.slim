@@ -1,0 +1,7 @@
+h1 DaylyDigest#digest
+p = @greeting 
+h3 Questions created for day:
+
+ul
+  - @new_questions.each do |q| 
+    li= link_to "#{q.title}", question_url(q)

@@ -1,0 +1,9 @@
+h1 Added a new answer to your question
+p = @greeting 
+
+p 
+  = @answer.author.email
+  |  answered:  
+  = "\"#{@answer.body}\"" 
+  |  link to question:  
+  = link_to @answer.question.title, question_url(@answer.question)

@@ -47,4 +47,6 @@ Rails.application.configure do
   config.action_cable.disable_request_forgery_protection = true
   
   OmniAuth.config.test_mode = true
+
+  ActiveJob::Base.queue_adapter = :test
 end
