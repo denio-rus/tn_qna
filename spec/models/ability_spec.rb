@@ -26,15 +26,15 @@ describe Ability do
     let(:question_of_other_user) { create :question, user_id: other_user.id }
     let(:answer_of_user) { create :answer, user_id: user.id }
     let(:answer_of_other_user) { create :answer, user_id: other_user.id }
-    let(:subscribe_of_user) { create :subscribe, user_id: user.id }
-    let(:subscribe_of_other_user) { create :subscribe, user_id: other_user.id }
+    let(:subscription_of_user) { create :subscription, user_id: user.id }
+    let(:subscription_of_other_user) { create :subscription, user_id: other_user.id }
   
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
 
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
-    it { should be_able_to :create, Subscribe }
+    it { should be_able_to :create, Subscription }
     it { should be_able_to :create_comment, Comment }
     
     it { should be_able_to :update, question_of_user }
@@ -49,8 +49,8 @@ describe Ability do
     it { should be_able_to :destroy, answer_of_user }
     it { should_not be_able_to :destroy, answer_of_other_user }
 
-    it { should be_able_to :destroy, subscribe_of_user }
-    it { should_not be_able_to :destroy, subscribe_of_other_user }    
+    it { should be_able_to :destroy, subscription_of_user }
+    it { should_not be_able_to :destroy, subscription_of_other_user }    
     
     context 'Links' do
       it { should be_able_to :destroy, create(:link, linkable: question_of_user) }

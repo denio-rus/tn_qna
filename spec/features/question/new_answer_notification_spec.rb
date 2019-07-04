@@ -6,7 +6,6 @@ feature "User can get 'new answer notifications'", %q{
   I'd like to be able to receive notification about new answers to the question
 } do
   ActiveJob::Base.queue_adapter = :test
-  
   given(:question) { create(:question) }
   given(:user) { create(:user) }
 

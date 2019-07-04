@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     resources :answers, only: [:create, :destroy, :update], shallow: true, concerns: [:votable, :commentable] do
       post 'best', on: :member
     end
-    resources :subscribes, only: [:destroy, :create], shallow: true
+    resources :subscriptions, only: [:destroy, :create], shallow: true
   end
 
   resources :attachments, only: :destroy
