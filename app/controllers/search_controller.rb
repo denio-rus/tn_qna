@@ -1,7 +1,6 @@
 class SearchController < ApplicationController
-  skip_authorization_check
-
   def result
+    authorize! :search, :all
     if params[:query].present?
       @result = Services::Search.call(params[:query], params[:query_object], params[:page], params[:per_page])
       parse_result(@result)

@@ -9,6 +9,7 @@ describe Ability do
     it { should be_able_to :read, Question } 
     it { should be_able_to :read, Answer } 
     it { should be_able_to :read, Comment }
+    it { should be_able_to :search, :all }
 
     it { should_not be_able_to :manage, :all }
   end
@@ -17,6 +18,7 @@ describe Ability do
     let(:user) { create :user, admin: true }
   
     it { should be_able_to :manage, :all }
+    it { should be_able_to :search, :all }
   end
 
   describe 'for user' do
@@ -31,6 +33,7 @@ describe Ability do
   
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
+    it { should be_able_to :search, :all }
 
     it { should be_able_to :create, Question }
     it { should be_able_to :create, Answer }
