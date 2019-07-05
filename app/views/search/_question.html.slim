@@ -3,4 +3,4 @@ tr
   td= question.body.truncate(100)
   td= question.rating
   td= question.created_at
-  td= question.author.email
+  td= question.author&.email || "deleted"

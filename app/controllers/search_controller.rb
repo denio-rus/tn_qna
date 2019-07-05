@@ -12,7 +12,7 @@ class SearchController < ApplicationController
   private
 
   def parse_result(result)
-    @questions, @answers, @comments, @people = [], [], [], []
+    @questions, @answers, @comments, @users = [], [], [], []
 
     result.each do |item|
       case item.class.name
@@ -23,7 +23,7 @@ class SearchController < ApplicationController
       when "Comment"
         @comments << item
       else
-        @people << item
+        @users << item
       end
     end
   end

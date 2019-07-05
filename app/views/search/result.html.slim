@@ -35,7 +35,7 @@ h3 Searching results:
     tbody
       =render partial: 'search/comment', collection: @comments
 
--if @people.any?
+-if @users.any?
   h4 Persons:
   table
     thead
@@ -43,6 +43,6 @@ h3 Searching results:
         td email
         td registred
     tbody
-      =render partial: 'search/user', collection: @peolpe, as: :user
+      =render partial: 'search/user', collection: @users
 
 p= link_to 'Back to list', questions_path
