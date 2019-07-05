@@ -1,4 +1,48 @@
-h1 Search#search_result
-p Find me in app/views/search/search_result.html.slim
+h3 Searching results: 
+-if @questions.any?
+  h4 Questions:
+  table
+    thead
+      tr
+        td title
+        td question
+        td rating
+        td created
+        td author
+    tbody
+      =render partial: 'search/question', collection: @questions
+
+-if @answers.any?
+  h4 Answers:
+  table
+    thead
+      tr
+        td Answer
+        td rating
+        td created
+        td author
+    tbody
+      =render partial: 'search/answer', collection: @answers
+
+-if @comments.any?
+  h4 Comments:
+  table
+    thead
+      tr
+        td Comment
+        td created
+        td author
+    tbody
+      =render partial: 'search/comment', collection: @comments
+
+-if @people.any?
+  h4 Persons:
+  table
+    thead
+      tr
+        td email
+        td registred
+    tbody
+      =render partial: 'search/user', collection: @peolpe, as: :user
 
 p= link_to 'Back to list', questions_path
