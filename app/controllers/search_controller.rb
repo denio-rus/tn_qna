@@ -3,7 +3,8 @@ class SearchController < ApplicationController
 
   def result
     if params[:query].present?
-      parse_result(Services::Search.call(params[:query], params[:query_object]))
+      @result = Services::Search.call(params[:query], params[:query_object], params[:page], params[:per_page])
+      parse_result(@result)
     else
       redirect_to root_path, alert: 'Empty query'
     end
