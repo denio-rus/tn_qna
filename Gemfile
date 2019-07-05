@@ -53,6 +53,8 @@ gem 'oj'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'whenever', require: false
+gem 'mysql2'
+gem 'thinking-sphinx'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'
