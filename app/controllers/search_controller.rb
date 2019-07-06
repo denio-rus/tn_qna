@@ -1,11 +1,11 @@
 class SearchController < ApplicationController
   def result
     authorize! :search, :all
-    if params[:query].present?
+    if params[:query].present? && params[:query_object].present?
       @result = Services::Search.call(params[:query], params[:query_object], params[:page], params[:per_page])
       parse_result(@result)
     else
-      redirect_to root_path, alert: 'Empty query'
+     redirect_to root_path, alert: 'Empty query'
     end
   end
 
