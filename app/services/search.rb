@@ -19,6 +19,6 @@ class Services::Search
   def call
     return ThinkingSphinx.search(@query, page: @page, per_page: @per_page) if @query_object == 'all'
 
-    Object.const_get(@query_object).search(@query, page: @page, per_page: @per_page)
+    @query_object.constantize.search(@query, page: @page, per_page: @per_page)
   end
 end
