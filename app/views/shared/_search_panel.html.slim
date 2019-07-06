@@ -1,0 +1,12 @@
+.search-panel
+  = form_with url: search_result_url, method: :get, local: true do |f|
+    p
+      =f.label :query, "Search: "
+      =f.text_field :query
+      =f.label :query_object, " in " 
+      =f.collection_select :query_object, query_objects, :last, :first, selected: :all
+      =f.label :per_page, " Results per page "
+      =f.number_field :per_page, value: '20', max: 100, min: 20, step: 5
+      br
+      =f.submit "Go"
+      

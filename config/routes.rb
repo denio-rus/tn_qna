@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
   resources :links, only: :destroy
   resources :rewards, only: :index
-  
+
+  get 'search/result'  
 
   default_url_options host: 'localhost:3000'
   mount ActionCable.server => '/cable'

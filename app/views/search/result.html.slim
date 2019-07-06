@@ -1,0 +1,50 @@
+h3 Searching results:
+=will_paginate @result
+.results
+  -if @questions.any?
+    h4 Questions:
+    table
+      thead
+        tr
+          td title
+          td question
+          td rating
+          td created
+          td author
+      tbody
+        =render partial: 'search/question', collection: @questions
+
+  -if @answers.any?
+    h4 Answers:
+    table
+      thead
+        tr
+          td Answer
+          td rating
+          td created
+          td author
+      tbody
+        =render partial: 'search/answer', collection: @answers
+
+  -if @comments.any?
+    h4 Comments:
+    table
+      thead
+        tr
+          td Comment
+          td created
+          td author
+      tbody
+        =render partial: 'search/comment', collection: @comments
+
+  -if @users.any?
+    h4 Persons:
+    table
+      thead
+        tr
+          td email
+          td registred
+      tbody
+        =render partial: 'search/user', collection: @users
+
+p= link_to 'Back to list', questions_path

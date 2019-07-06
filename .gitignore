@@ -28,3 +28,6 @@
 /config/database.yml
 .vscode
 .rubocop.yml
+
+config/*.sphinx.conf
+db/sphinx
