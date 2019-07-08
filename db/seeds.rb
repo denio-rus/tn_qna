@@ -9,7 +9,7 @@ ActiveJob::Base.queue_adapter = :test
 
 %w[dan vasya felix margo nick admin].each { |name| User.create(email: "#{name}@sdfmsmfkl.com", password: "123456", confirmed_at: Time.current) }
 
-User.where(email: "admin@mail.com").first.update(admin: true)
+User.where(email: "admin@sdfmsmfkl.com").first.update(admin: true)
 
 THEMES = %w[maths Spanish pirates credits Ruby Rails health chess dogs].freeze
 ADJ = %w[nice awful bad good awesome].freeze
