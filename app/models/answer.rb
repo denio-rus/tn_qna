@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
   
   scope :best_first, -> { order(best: :desc) }
   
-  after_create :notice_question_subscribers
+  after_commit :notice_question_subscribers, on: :create
 
   def set_best
     transaction do
