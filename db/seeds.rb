@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 ActiveJob::Base.queue_adapter = :test
 
-%w[dan vasya felix margo nick admin].each { |name| User.create(email: "#{name}@mail.com", password: "123456", confirmed_at: Time.current) }
+%w[dan vasya felix margo nick admin].each { |name| User.create(email: "#{name}@sdfmsmfkl.com", password: "123456", confirmed_at: Time.current) }
 
 User.where(email: "admin@mail.com").first.update(admin: true)
 
