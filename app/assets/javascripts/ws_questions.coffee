@@ -5,5 +5,6 @@ $ ->
     ,
 
     received: (data) ->
+      console.log(data)
       $('.question_list').append(data)
   })
