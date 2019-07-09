@@ -1,6 +1,6 @@
 :queues:
-  -default
-  -mailers
+  - default
+  - mailers
 
 develpoment:
   :concurrency: 
