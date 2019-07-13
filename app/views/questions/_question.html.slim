@@ -1,91 +1,92 @@
-.question-errors
-    = render 'shared/errors', resource: question
+- cache question do
+  .question-errors
+      = render 'shared/errors', resource: question
 
-h3= question.title
-p= question.body
+  h3= question.title
+  p= question.body
 
-.question-voting
-  p.question-rating 
-    | rating: 
-    = question.rating
+  .question-voting
+    p.question-rating 
+      | rating: 
+      = question.rating
 
-  p.question-voting-links
-    -if can? :unvote, question.vote_of(current_user)
-      =link_to 'Unvote', unvote_question_path(question), method: :patch, data: { type: :json }, remote: true 
-      br
-    -if can?(:dislike, question.vote_of(current_user)) || can?(:create_vote, question.votes.new)
-      =link_to "Dislike", dislike_question_path(question), method: :patch, data: { type: :json }, remote: true
-      br
-    -if can?(:like, question.vote_of(current_user)) || can?(:create_vote, question.votes.new)
-      =link_to "Like", like_question_path(question), method: :patch, data: { type: :json }, remote: true
-
-
-.links
-  -if question&.links&.first&.persisted?
-    p Links:
-    -question.links.each do |link|
-      -if link.gist?
-        -link.gist_content.map do |file|
-          p= file[:filename]
-          textarea= file[:content]
-          br= link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, link
-      -else
-        p
-          = link_to link.name, link.url
-          br
-          = link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, link
-
-.files
-  - if question.files.attached?
-    - question.files.each do |file|
-      p
-        = link_to file.filename.to_s, url_for(file)
+    p.question-voting-links
+      -if can? :unvote, question.vote_of(current_user)
+        =link_to 'Unvote', unvote_question_path(question), method: :patch, data: { type: :json }, remote: true 
         br
-        - if can? :destroy, file
-          = link_to 'Delete file', attachment_path(file), method: :delete, remote: true 
-
-- if question.reward
-  p Reward:
-  p
-    = question.reward.title
-    = image_tag question.reward.image
-
-.subscribe
-  -if can?(:create, Subscription) && !@subscription
-    p= link_to "Subscribe", question_subscriptions_path(question), method: :post
-  -if can?(:destroy, @subscription) && @subscription
-    p= link_to "Unsubscribe", subscription_path(@subscription), method: :delete
+      -if can?(:dislike, question.vote_of(current_user)) || can?(:create_vote, question.votes.new)
+        =link_to "Dislike", dislike_question_path(question), method: :patch, data: { type: :json }, remote: true
+        br
+      -if can?(:like, question.vote_of(current_user)) || can?(:create_vote, question.votes.new)
+        =link_to "Like", like_question_path(question), method: :patch, data: { type: :json }, remote: true
 
 
-.[class='comment-question-#{question.id}']
-  = render question.comments
-  
-  - if can? :create_comment, Comment  
-    .question-new-comment
-      p= link_to 'Add comment', '#', class: 'add-comment-link', data: { question_id: question.id }
-      .[class='form-comment-question-#{question.id} hidden']
-        = render 'comments/form', resource: question 
+  .links
+    -if question&.links&.first&.persisted?
+      p Links:
+      -question.links.each do |link|
+        -if link.gist?
+          -link.gist_content.map do |file|
+            p= file[:filename]
+            textarea= file[:content]
+            br= link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, link
+        -else
+          p
+            = link_to link.name, link.url
+            br
+            = link_to 'Delete link', link_path(link), method: :delete, remote: true if can? :destroy, link
 
-- if can?(:update, question)
-  p= link_to 'Edit question','#', class: 'edit-question-link', data: { question_id: question.id }
-- if can?(:destroy, question)
-  p= link_to 'Delete question', question_path(@question), method: :delete 
+  .files
+    - if question.files.attached?
+      - question.files.each do |file|
+        p
+          = link_to file.filename.to_s, url_for(file)
+          br
+          - if can? :destroy, file
+            = link_to 'Delete file', attachment_path(file), method: :delete, remote: true 
 
-  = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
+  - if question.reward
+    p Reward:
     p
-      = f.label :title
-      = f.text_field :title
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true
-    p Links:
-    p
-      = f.fields_for :links do |link| 
-        = render 'shared/link_fields', f: link
-      .links
-        = link_to_add_association 'Add link', f, :links, partial: 'shared/link_fields'
-    p
-      =f.submit 'Save'
+      = question.reward.title
+      = image_tag question.reward.image
+
+  .subscribe
+    -if can?(:create, Subscription) && !@subscription
+      p= link_to "Subscribe", question_subscriptions_path(question), method: :post
+    -if can?(:destroy, @subscription) && @subscription
+      p= link_to "Unsubscribe", subscription_path(@subscription), method: :delete
+
+
+  .[class='comment-question-#{question.id}']
+    = render question.comments
+    
+    - if can? :create_comment, Comment  
+      .question-new-comment
+        p= link_to 'Add comment', '#', class: 'add-comment-link', data: { question_id: question.id }
+        .[class='form-comment-question-#{question.id} hidden']
+          = render 'comments/form', resource: question 
+
+  - if can?(:update, question)
+    p= link_to 'Edit question','#', class: 'edit-question-link', data: { question_id: question.id }
+  - if can?(:destroy, question)
+    p= link_to 'Delete question', question_path(@question), method: :delete 
+
+    = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
+      p
+        = f.label :title
+        = f.text_field :title
+      p
+        = f.label :body
+        = f.text_area :body
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true
+      p Links:
+      p
+        = f.fields_for :links do |link| 
+          = render 'shared/link_fields', f: link
+        .links
+          = link_to_add_association 'Add link', f, :links, partial: 'shared/link_fields'
+      p
+        =f.submit 'Save'
