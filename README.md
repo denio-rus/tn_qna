@@ -1,24 +1,14 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Simplified analogue of the site stackoverflow.com having the following features: 
+- ask questions on issues of interest,
+- give answers,
+- vote for the answer,
+- attach files to questions and answers (ActiveStorage, storage in the Amazon cloud),
+- authenticate with third party services (GitHub, Vkontakte)
+- to carry out full-text search in content (Sphinx),
+- to carry out mailing using background tasks(ActiveJob),
+- REST API. 
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Full test coverage (TDD/BDD, Capybara, RSpec)
+Used gems: devise, slim-rails, cancancan, OmniAuth
