@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
   include Commentable
   
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
-  belongs_to :question
+  belongs_to :question, touch: true
 
   validates :body, presence: true
   

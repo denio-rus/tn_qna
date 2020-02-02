@@ -58,6 +58,7 @@ gem 'thinking-sphinx'
 gem 'will_paginate', '~> 3.1.0'
 gem 'mini_racer'
 gem 'unicorn'
+gem "redis-rails"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.8'

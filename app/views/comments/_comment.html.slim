@@ -1,5 +1,6 @@
-p
-  = comment.author ? comment.author.email : 'Deleted user'
-  |  said:
-  br
-  = comment.body
+- cache comment do
+  p
+    = comment.author ? comment.author.email : 'Deleted user'
+    |  said:
+    br
+    = comment.body
